@@ -11,7 +11,7 @@ public class User {
     private String password;//密码
     private String nickname;//昵称
     private String headPicturePath;//头像
-    private String musicListenTime;//听歌时长
+    private Integer musicListenTime;//听歌时长
     private List<PlayList> ownerMusicList; //用户拥有的歌单
 
     /**
@@ -75,11 +75,11 @@ public class User {
         this.headPicturePath = headPicturePath;
     }
 
-    public String getMusicListenTime() {
+    public Integer getMusicListenTime() {
         return musicListenTime;
     }
 
-    public void setMusicListenTime(String musicListenTime) {
+    public void setMusicListenTime(Integer musicListenTime) {
         this.musicListenTime = musicListenTime;
     }
 

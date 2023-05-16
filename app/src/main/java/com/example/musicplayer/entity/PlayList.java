@@ -10,7 +10,7 @@ import java.util.List;
 public class PlayList {
     private String listName;//歌单名
     private String listPicturePath;//歌单封面路径
-    private String owner;//歌单所属用户
+    private Integer owner;//歌单所属用户
     private List<Music> musicList;//歌曲列表
 
     /**
@@ -24,10 +24,10 @@ public class PlayList {
     /**
      * 有参构造方法
      *
-     * @param username 用户名（注意是账号而不是昵称）
+     * @param user_id 用户ID
      */
-    public PlayList(String username) {
-        this.setOwner(username);
+    public PlayList(Integer user_id) {
+        this.setOwner(user_id);
         this.setListName("未命名");
         this.setMusicList(new ArrayList<>());
     }
@@ -35,11 +35,11 @@ public class PlayList {
     /**
      * 有参构造方法
      *
-     * @param username 用户名（注意是账号而不是昵称）
+     * @param user_id 用户ID
      * @param listName 歌单名
      */
-    public PlayList(String username, String listName) {
-        this.setOwner(username);
+    public PlayList(Integer user_id, String listName) {
+        this.setOwner(user_id);
         this.setListName(listName);
         this.setMusicList(new ArrayList<>());
     }
@@ -64,11 +64,11 @@ public class PlayList {
         this.listPicturePath = listPicturePath;
     }
 
-    public String getOwner() {
+    public Integer getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(Integer owner) {
         this.owner = owner;
     }
 
