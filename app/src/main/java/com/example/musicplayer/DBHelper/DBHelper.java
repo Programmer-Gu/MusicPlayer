@@ -4,12 +4,23 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.musicplayer.LogHelper.DBLog;
+import com.example.musicplayer.entity.Music;
+import com.example.musicplayer.entity.User;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     //数据库名&数据库版本
     private static final String DATABASE_NAME = "music_player.db";
     private static final int DATABASE_VERSION = 1;
+
+    //数据库操作对象
+    private static DBHelper dbHelper = null;
+    private SQLiteDatabase mRDB = null; //数据库读对象
+    private SQLiteDatabase mWDB = null; //数据库写对象
+
 
     //用户表
     private static final String TABLE_USER = "user";
@@ -49,6 +60,55 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * 单例模式获取操作对象
+     * @param context  上下文
+     * @return DBHelper操作对象
+     */
+    public static DBHelper getInstance(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new DBHelper(context);
+        }
+        return dbHelper;
+    }
+
+
+    /**
+     *  打开数据库的读连接
+     */
+    public SQLiteDatabase openReadLink() {
+        if (mRDB == null || !mRDB.isOpen()) {
+            mRDB = dbHelper.getReadableDatabase();
+        }
+        return mRDB;
+    }
+
+
+    /**
+     *  打开数据库的写连接
+     */
+    public SQLiteDatabase openWriteLink() {
+        if (mWDB == null || !mWDB.isOpen()) {
+            mWDB = dbHelper.getWritableDatabase();
+        }
+        return mWDB;
+    }
+
+
+    /**
+     *  数据库连接关闭
+     */
+    public void closeLink() {
+        if (mRDB != null && mRDB.isOpen()) {
+            mRDB.close();
+            mRDB = null;
+        }
+        if (mWDB != null && mWDB.isOpen()) {
+            mWDB.close();
+            mWDB = null;
+        }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // 1.创建用户表
@@ -66,8 +126,8 @@ public class DBHelper extends SQLiteOpenHelper {
         // 2.创建音乐表
         String createMusicTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_MUSIC + "(" +
                 COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_MUSIC_NAME + " TEXT," +
-                COLUMN_MUSIC_SINGER_NAME + " TEXT," +
+                COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
+                COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
                 COLUMN_MUSIC_COVER_PATH + " TEXT," +
                 COLUMN_MUSIC_MUSIC_VIDEO_PATH + " TEXT," +
                 COLUMN_MUSIC_LYRICS_PATH + " TEXT" +
@@ -112,29 +172,29 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // 向用户表中插入数据
-    public long insertUser(String username, String password, String headPicturePath, long musicListenTime) {
+    public long insertUser(User user) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, username);
-        values.put(COLUMN_USER_PASSWORD, password);
-        values.put(COLUMN_USER_HEAD_PICTURE_PATH, headPicturePath);
-        values.put(COLUMN_USER_MUSIC_LISTEN_TIME, musicListenTime);
+        values.put(COLUMN_USER_NAME, user.getUsername());
+        values.put(COLUMN_USER_PASSWORD, user.getPassword());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_USER, null, values);
         db.close();
+        //打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_USER, "插入" + result + "行");
         return result;
     }
 
     // 向音乐表中插入数据
-    public long insertMusic(String musicName, String singerName, String coverPath, String musicVideoPath, String lyricsPath) {
+    public long insertMusic(Music music) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_MUSIC_NAME, musicName);
-        values.put(COLUMN_MUSIC_SINGER_NAME, singerName);
-        values.put(COLUMN_MUSIC_COVER_PATH, coverPath);
-        values.put(COLUMN_MUSIC_MUSIC_VIDEO_PATH, musicVideoPath);
-        values.put(COLUMN_MUSIC_LYRICS_PATH, lyricsPath);
+        values.put(COLUMN_MUSIC_NAME, music.getMusicName());
+        values.put(COLUMN_MUSIC_SINGER_NAME, music.getSingerName());
+
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_MUSIC, null, values);
         db.close();
+        //打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_MUSIC, "插入" + result + "行");
         return result;
     }
 
@@ -147,6 +207,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_PLAYLIST, null, values);
         db.close();
+        //打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST, "插入" + result + "行");
         return result;
     }
 
@@ -158,6 +220,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_PLAYLIST_SONG, null, values);
         db.close();
+        //打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST_SONG, "插入" + result + "行");
         return result;
     }
 
@@ -169,6 +233,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_USER_PLAYLIST, null, values);
         db.close();
+        //打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_USER_PLAYLIST, "插入" + result + "行");
         return result;
     }
 
