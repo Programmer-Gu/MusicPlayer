@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MusciService extends Service {
+public class MusicService extends Service {
 
     private MediaPlayer player;   //声明一个MediaPlayer引用
     private Timer timer; //声明一个计时器引用
@@ -19,7 +20,7 @@ public class MusciService extends Service {
     /**
      * 无参构造方法
      */
-    private MusciService() {
+    private MusicService() {
     }
 
 
@@ -52,9 +53,16 @@ public class MusciService extends Service {
 
                     //todo 先写MusicPlayerActivity
 //                    Message msg= MusicPlayerActivity.handler.obtainMessage();//创建消息对象
+                    //将音乐的总时长和播放进度封装至bundle中
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("duration", duration);
+                    bundle.putInt("currentPosition", currentPosition);
+                    //再将bundle封装到msg消息对象中
 
+                    //最后将消息发送到主线程的消息队列中
                 }
             };
+            timer.schedule(timerTask, 5,500);
         }
     }
 
@@ -62,7 +70,7 @@ public class MusciService extends Service {
     /**
      * 内部类：跨进程通信音乐信息的辅助类
      */
-    class MusicControl extends Binder {
+   public class MusicControl extends Binder {
         public void play(int i) {
             Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + "music" + i);
             try {
@@ -100,14 +108,14 @@ public class MusciService extends Service {
             player.seekTo(progress);
         }
     }
-    //销毁多媒体播放器
 
+    //销毁多媒体播放器
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (player == null) return;
         if (player.isPlaying()) player.stop();//停止播放音乐
         player.release();//释放占用的资源
-        player = null;
+        player = null; //player置为空
     }
 }
