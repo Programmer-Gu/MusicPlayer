@@ -39,8 +39,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_MUSIC_NAME = "musicName";
     private static final String COLUMN_MUSIC_SINGER_NAME = "singerName";
     private static final String COLUMN_MUSIC_COVER_PATH = "coverPath";
-    private static final String COLUMN_MUSIC_MUSIC_VIDEO_PATH = "musicVideoPath";
-    private static final String COLUMN_MUSIC_LYRICS_PATH = "lyricsPath";
+    private static final String COLUMN_MUSIC_PATH = "musicPath";
+
 
     //歌单表
     private static final String TABLE_PLAYLIST = "playlist";
@@ -126,13 +126,36 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createUserTableQuery);
 
 
-        // 2.创建音乐表
-        String createMusicTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_MUSIC + "(" +
-                COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
-                COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
-                COLUMN_MUSIC_COVER_PATH + " TEXT" + ")";
-        db.execSQL(createMusicTableQuery);
+        // 检查音乐表是否存在
+        boolean isTableExists = false;
+        String checkTableQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
+        Cursor cursor = db.rawQuery(checkTableQuery, new String[]{TABLE_MUSIC});
+        if (cursor.moveToFirst()) {
+            isTableExists = true; // 表已经存在
+        }
+        cursor.close();
+
+        // 如果表不存在，则创建表并插入数据
+        if (!isTableExists) {
+            // 创建音乐表
+            String createMusicTableQuery = "CREATE TABLE " + TABLE_MUSIC + "(" +
+                    COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
+                    COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
+                    COLUMN_MUSIC_COVER_PATH + " INTEGER," +
+                    COLUMN_MUSIC_PATH + " TEXT)";
+            db.execSQL(createMusicTableQuery);
+            // 插入数据
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_MUSIC_NAME, "Song 1");
+            values.put(COLUMN_MUSIC_SINGER_NAME, "Singer 1");
+            values.put(COLUMN_MUSIC_COVER_PATH, 123);
+            values.put(COLUMN_MUSIC_PATH, 123);
+            db.insert(TABLE_MUSIC, null, values);
+
+            // 插入更多数据...
+        }
+
 
         // 3.创建歌单表
         String createPlaylistTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_PLAYLIST + "(" +
@@ -271,14 +294,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *  用户登录方法，当且仅当用户的邮箱存在且邮箱密码都正确返回true
-     * @param context 页面上下文
-     * @param email 用户邮箱
+     * 用户登录方法，当且仅当用户的邮箱存在且邮箱密码都正确返回用户id
+     *
+     * @param context  页面上下文
+     * @param email    用户邮箱
      * @param password 用户密码
-     * @return   true or false
      */
-    public boolean loginUser(Context context,String email, String password) {
-
+    public int loginUser(Context context, String email, String password) {
 
         // 查询用户表
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + " = ?";
@@ -286,12 +308,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         boolean isEmailRegistered = cursor.moveToFirst(); // 如果邮箱已经注册，moveToFirst() 返回 true
 
-        // 如果邮箱未注册，返回 false
+        // 如果邮箱未注册，返回 -1 表示登录失败
         if (!isEmailRegistered) {
             cursor.close();
             DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "邮箱不存在");
-            showToast(context,"您输入的邮箱尚未注册");
-            return false;
+            showToast(context, "您输入的邮箱尚未注册");
+            return -1;
         }
 
         // 邮箱存在，检查密码是否正确
@@ -300,28 +322,75 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
             // 处理密码列不存在的情况
             DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "密码列不存在");
-            return false;
+            return -1;
         }
 
         String storedPassword = cursor.getString(passwordColumnIndex);
-        cursor.close();
+
 
         if (!password.equals(storedPassword)) {
             DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "密码不正确");
-            showToast(context,"你输入的密码不正确喔~");
-            return false;
+            showToast(context, "你输入的密码不正确喔~");
+            return -1;
         }
 
+        // 邮箱存在且密码正确，获取用户ID并返回
+        int userIdColumnIndex = cursor.getColumnIndex(COLUMN_USER_ID);
+        if (userIdColumnIndex == -1) {
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "用户ID列不存在");
+            return -1;
+        }
 
-        // 邮箱存在且密码正确
+        int userId = cursor.getInt(userIdColumnIndex);
+
         DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "登录成功");
-        showToast(context,"恭喜您登录成功！");
-        return true;
+        showToast(context, "恭喜您登录成功！");
+        cursor.close();
+        return userId;
+    }
+
+
+    /**
+     * 根据用户id查询用户的邮箱和昵称
+     *
+     * @param userId 用户id
+     * @return User对象
+     */
+    public User getUserById(int userId) {
+        String query = "SELECT " + COLUMN_USER_NICKNAME + ", " + COLUMN_USER_EMAIL +
+                " FROM " + TABLE_USER +
+                " WHERE " + COLUMN_USER_ID + " = ?";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        //处理查询结果
+        if (cursor.moveToFirst()) {
+            int nicknameColumnIndex = cursor.getColumnIndex(COLUMN_USER_NICKNAME);
+            int emailColumnIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
+
+            if (nicknameColumnIndex != -1 && emailColumnIndex != -1) {
+                String nickname = cursor.getString(nicknameColumnIndex);
+                String email = cursor.getString(emailColumnIndex);
+                cursor.close();
+                User user = new User();
+                user.setNickname(nickname);
+                user.setUser_email(email);
+                return user;
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "列索引无效");
+                return null; // 列索引无效
+            }
+        } else {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "用户不存在");
+            return null; // 用户不存在
+        }
     }
 
 
     /**
      * toast消息辅助方法
+     *
      * @param context
      * @param message
      */

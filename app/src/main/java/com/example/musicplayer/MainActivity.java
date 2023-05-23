@@ -7,12 +7,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.CategoryFragment;
 import com.example.musicplayer.MenuFragment.HomeFragment;
 import com.example.musicplayer.MenuFragment.PersonalFragment;
@@ -43,6 +47,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Fragment mFrag2;
     private Fragment mFrag3;
 
+    private DBHelper dbHelper;
+
+    private SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //建立数据库对象
+        dbHelper = DBHelper.getInstance(this);
+        //打开数据库读写连接
+        dbHelper.openReadLink();
+        dbHelper.openWriteLink();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +69,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initViews();//初始化控件
         initEvents();//初始化事件
         initDatas();//初始化数据
+
+        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
+        //查询登录状态，如果没有登录，跳转到登录界面
+        boolean login_status = sharedPreferences.getBoolean("login_status", false);
+        if (!login_status) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initEvents() {
@@ -62,7 +88,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private void initViews() {
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-            //初始化四个Tab的布局文件
+        //初始化四个Tab的布局文件
         mTab1 = (LinearLayout) findViewById(R.id.id_tab1);
         mTab2 = (LinearLayout) findViewById(R.id.id_tab2);
         mTab3 = (LinearLayout) findViewById(R.id.id_tab3);
@@ -76,7 +102,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void initDatas() {
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
-        mFragments.add(new HomeFragment( MainActivity.this ));
+        mFragments.add(new HomeFragment(MainActivity.this));
         mFragments.add(new CategoryFragment());
         mFragments.add(new PersonalFragment());
 
@@ -122,7 +148,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         resetImgs(); //先将四个ImageButton置为灰色
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.id_tab1:
                 selectTab(0);
                 break;
@@ -155,15 +181,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     //将四个的Fragment隐藏
     private void hideFragments(FragmentTransaction transaction) {
-            if (mFrag1 != null) {
-                transaction.hide(mFrag1);
-            }
-            if (mFrag2 != null) {
-                transaction.hide(mFrag2);
-            }
-            if (mFrag3 != null) {
-                transaction.hide(mFrag3);
-            }
+        if (mFrag1 != null) {
+            transaction.hide(mFrag1);
+        }
+        if (mFrag2 != null) {
+            transaction.hide(mFrag2);
+        }
+        if (mFrag3 != null) {
+            transaction.hide(mFrag3);
+        }
     }
 
     //将四个ImageButton置为灰色

@@ -2,7 +2,9 @@ package com.example.musicplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText et_email;
     private EditText et_password;
     private DBHelper dbHelper;
+    private SharedPreferences sharedPreferences;
+    private Intent intent;
 
     @Override
     protected void onStart() {
@@ -37,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
         findViewById(R.id.btn_back).setOnClickListener(this);
+        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
 
     }
@@ -53,15 +58,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this, "请输入完整信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                boolean b = dbHelper.loginUser(this, email, password);
-                if (b) {
-                    Log.d("用户登录:", "登录成功");
-                } else {
+                int user_id = dbHelper.loginUser(this, email, password);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (user_id == -1) {
                     Log.d("用户登录:", "登录失败");
+                    editor.putBoolean("login_status", false);
+                } else {
+                    Log.d("用户登录:", "登录成功");
+                    //登录成功后，获取用户id放入sharedPreferences
+                    editor.putInt("user_id", user_id);
+                    editor.putBoolean("login_status", true);
                 }
+                editor.apply();
+
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_register:
-                Intent intent = new Intent(LoginActivity.this, RegActivity.class);
+                intent = new Intent(LoginActivity.this, RegActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_back:

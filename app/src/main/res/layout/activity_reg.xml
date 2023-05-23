@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="返回"
-        android:textColor="#ffffff"/>
+        android:textColor="#ffffff" />
 
 
     <TextView
@@ -21,7 +21,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="用户注册"
-        android:textColor="#ff0000"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <EditText
@@ -35,7 +35,7 @@
         android:background="#ffffff"
         android:hint="邮箱"
         android:padding="16dp"
-        android:textColor="#ff0000" />
+        android:textColor="@color/black" />
 
     <EditText
         android:id="@+id/et_password"
@@ -49,7 +49,7 @@
         android:hint="密码"
         android:inputType="textPassword"
         android:padding="16dp"
-        android:textColor="#ff0000" />
+        android:textColor="@color/black" />
 
     <EditText
         android:id="@+id/et_confirmPassword"
@@ -63,7 +63,7 @@
         android:hint="确认密码"
         android:inputType="textPassword"
         android:padding="16dp"
-        android:textColor="#ff0000" />
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btn_register"
@@ -72,7 +72,6 @@
         android:layout_below="@+id/et_confirmPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:background="#ff0000"
         android:padding="16dp"
         android:text="注册"
         android:textColor="#ffffff" />
