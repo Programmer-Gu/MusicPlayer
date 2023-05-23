@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.musicplayer.LogHelper.DBLog;
 import com.example.musicplayer.entity.Music;
@@ -271,5 +272,65 @@ public class DBHelper extends SQLiteOpenHelper {
         DBLog.d(DBLog.INSERT_TAG, TABLE_USER, String.format("插入成功，用户使用邮箱:{}成功注册", email));
         return true;
     }
+
+    /**
+     *  用户登录方法，当且仅当用户的邮箱存在且邮箱密码都正确返回true
+     * @param context 页面上下文
+     * @param email 用户邮箱
+     * @param password 用户密码
+     * @return   true or false
+     */
+    public boolean loginUser(Context context,String email, String password) {
+
+
+        // 查询用户表
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + " = ?";
+        Cursor cursor = this.mRDB.rawQuery(query, new String[]{email});
+
+        boolean isEmailRegistered = cursor.moveToFirst(); // 如果邮箱已经注册，moveToFirst() 返回 true
+
+        // 如果邮箱未注册，返回 false
+        if (!isEmailRegistered) {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "邮箱不存在");
+            showToast(context,"您输入的邮箱尚未注册");
+            return false;
+        }
+
+        // 邮箱存在，检查密码是否正确
+        int passwordColumnIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
+        if (passwordColumnIndex == -1) {
+            cursor.close();
+            // 处理密码列不存在的情况
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "密码列不存在");
+            return false;
+        }
+
+        String storedPassword = cursor.getString(passwordColumnIndex);
+        cursor.close();
+
+        if (!password.equals(storedPassword)) {
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "密码不正确");
+            showToast(context,"你输入的密码不正确喔~");
+            return false;
+        }
+
+
+        // 邮箱存在且密码正确
+        DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "登录成功");
+        showToast(context,"恭喜您登录成功！");
+        return true;
+    }
+
+
+    /**
+     * toast消息辅助方法
+     * @param context
+     * @param message
+     */
+    private void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
 
 }
