@@ -131,10 +131,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
                 COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
-                COLUMN_MUSIC_COVER_PATH + " TEXT," +
-                COLUMN_MUSIC_MUSIC_VIDEO_PATH + " TEXT," +
-                COLUMN_MUSIC_LYRICS_PATH + " TEXT" +
-                ")";
+                COLUMN_MUSIC_COVER_PATH + " TEXT" + ")";
         db.execSQL(createMusicTableQuery);
 
         // 3.创建歌单表

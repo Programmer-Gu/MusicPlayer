@@ -166,15 +166,16 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 // 播放/暂停按钮点击事件
                 if (isPlaying) {
                     //切换图标
+                    musicControl.pausePlay();
+                    animator.pause();
+
+                } else {
                     btn_play_pause.setImageResource(R.drawable.ic_stop);
 
                     String position = intent1.getStringExtra("position");
                     int i = Integer.parseInt(position);
                     musicControl.play(i);
                     animator.start();
-                } else {
-                    musicControl.pausePlay();
-                    animator.pause();
                 }
                 //切换播放状态
                 isPlaying = !isPlaying;
