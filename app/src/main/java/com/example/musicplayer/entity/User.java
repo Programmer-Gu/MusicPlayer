@@ -7,7 +7,7 @@ import java.util.List;
  * 用户实体类
  */
 public class User {
-    private String username;//用户名
+    private String user_email;//用户邮箱
     private String password;//密码
     private String nickname;//昵称
     private String headPicturePath;//头像
@@ -23,11 +23,11 @@ public class User {
 
     /**
      * 用户名和密码的有参构造
-     * @param username 用户名
+     * @param user_email 用户名
      * @param password 密码
      */
-    public User(String username, String password) {
-        this.setUsername(username);
+    public User(String user_email, String password) {
+        this.setUser_email(user_email);
         this.setPassword(password);
         this.setOwnerMusicList(new ArrayList<>());
     }
@@ -43,12 +43,12 @@ public class User {
         this.ownerMusicList = ownerMusicList;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUser_email() {
+        return user_email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
     }
 
     public String getPassword() {

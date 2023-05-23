@@ -1,0 +1,80 @@
+<!-- activity_register.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8">
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="返回"
+        android:textColor="#ffffff"/>
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_back"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="用户注册"
+        android:textColor="#ff0000"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#ffffff"
+        android:hint="邮箱"
+        android:padding="16dp"
+        android:textColor="#ff0000" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_email"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#ffffff"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:textColor="#ff0000" />
+
+    <EditText
+        android:id="@+id/et_confirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_password"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#ffffff"
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:textColor="#ff0000" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_confirmPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="#ff0000"
+        android:padding="16dp"
+        android:text="注册"
+        android:textColor="#ffffff" />
+
+</RelativeLayout>

@@ -37,6 +37,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     //记录服务是否被解绑，默认没有
     private boolean isUnbind = false;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -101,7 +103,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         String position = intent1.getStringExtra("position");
 
         int i = Integer.parseInt(position);
-        iv_music.setImageResource(frag1.icons[i]);//这里获取音乐的封面
+//        iv_music.setImageResource(frag1.icons[i]);//这里获取音乐的封面
         animator = ObjectAnimator.ofFloat(iv_music, "rotation", 0f, 360.0f);
         animator.setDuration(10000);//动画旋转一周的时间为10秒
         animator.setInterpolator(new LinearInterpolator());//匀速

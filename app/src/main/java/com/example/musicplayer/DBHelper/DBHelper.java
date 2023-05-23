@@ -2,6 +2,7 @@ package com.example.musicplayer.DBHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -25,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //用户表
     private static final String TABLE_USER = "user";
     private static final String COLUMN_USER_ID = "user_id";
-    private static final String COLUMN_USER_NAME = "username";
+    private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "password";
     private static final String COLUMN_USER_NICKNAME = "nickname";
     private static final String COLUMN_USER_HEAD_PICTURE_PATH = "headPicturePath";
@@ -33,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //音乐表
     private static final String TABLE_MUSIC = "music";
-    private static final String COLUMN_MUSIC_ID = "id";
+    private static final String COLUMN_MUSIC_ID = "music_id";
     private static final String COLUMN_MUSIC_NAME = "musicName";
     private static final String COLUMN_MUSIC_SINGER_NAME = "singerName";
     private static final String COLUMN_MUSIC_COVER_PATH = "coverPath";
@@ -42,14 +43,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //歌单表
     private static final String TABLE_PLAYLIST = "playlist";
-    private static final String COLUMN_PLAYLIST_ID = "id";
+    private static final String COLUMN_PLAYLIST_ID = "playlist_id";
     private static final String COLUMN_PLAYLIST_LIST_NAME = "listName";
     private static final String COLUMN_PLAYLIST_LIST_PICTURE_PATH = "listPicturePath";
     private static final String COLUMN_PLAYLIST_OWNER = "owner";
 
     //创建歌单歌曲表
     private static final String TABLE_PLAYLIST_SONG = "playlistSong";
-    private static final String COLUMN_PLAYLIST_SONG_ID = "playlist_id";
+    private static final String COLUMN_PLAYLIST_SONG_ID = "song_playlist_id";
 
     // 创建用户歌单表
     private static final String TABLE_USER_PLAYLIST = "user_playlist";
@@ -62,7 +63,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 单例模式获取操作对象
-     * @param context  上下文
+     *
+     * @param context 上下文
      * @return DBHelper操作对象
      */
     public static DBHelper getInstance(Context context) {
@@ -74,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     *  打开数据库的读连接
+     * 打开数据库的读连接
      */
     public SQLiteDatabase openReadLink() {
         if (mRDB == null || !mRDB.isOpen()) {
@@ -85,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     *  打开数据库的写连接
+     * 打开数据库的写连接
      */
     public SQLiteDatabase openWriteLink() {
         if (mWDB == null || !mWDB.isOpen()) {
@@ -96,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     *  数据库连接关闭
+     * 数据库连接关闭
      */
     public void closeLink() {
         if (mRDB != null && mRDB.isOpen()) {
@@ -114,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // 1.创建用户表
         String createUserTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "(" +
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_USER_NAME + " TEXT NOT NULL," +
+                COLUMN_USER_EMAIL + " TEXT NOT NULL," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_NICKNAME + " TEXT DEFAULT '未命名'," +
                 COLUMN_USER_HEAD_PICTURE_PATH + " TEXT," +
@@ -174,7 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
     // 向用户表中插入数据
     public long insertUser(User user) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_USER_NAME, user.getUsername());
+        values.put(COLUMN_USER_EMAIL, user.getUser_email());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_USER, null, values);
@@ -236,6 +238,38 @@ public class DBHelper extends SQLiteOpenHelper {
         //打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_USER_PLAYLIST, "插入" + result + "行");
         return result;
+    }
+
+    /**
+     * 用户注册方法，如果邮箱没有被注册过则插入用户数据，否则不插入
+     *
+     * @param email    用户注册使用的邮箱
+     * @param password 用户注册使用的密码
+     * @return true:注册成功 false:注册失败
+     */
+    public boolean registerUser(String email, String password) {
+
+        // 查询用户表
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + " = ?";
+        Cursor cursor = this.mRDB.rawQuery(query, new String[]{email});
+
+        boolean isEmailRegistered = cursor.moveToFirst(); // 如果邮箱已经注册，moveToFirst() 返回 true
+
+        cursor.close();
+
+        // 如果邮箱已经注册过，返回 false
+        if (isEmailRegistered) {
+            DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "邮箱已存在");
+            return false;
+        }
+
+        // 如果邮箱未注册，执行插入操作
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_EMAIL, email);
+        values.put(COLUMN_USER_PASSWORD, password);
+        this.mWDB.insert(TABLE_USER, null, values);
+        DBLog.d(DBLog.INSERT_TAG, TABLE_USER, String.format("插入成功，用户使用邮箱:{}成功注册", email));
+        return true;
     }
 
 }
