@@ -76,7 +76,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void initDatas() {
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
-        mFragments.add(new HomeFragment());
+        mFragments.add(new HomeFragment( MainActivity.this ));
         mFragments.add(new CategoryFragment());
         mFragments.add(new PersonalFragment());
 

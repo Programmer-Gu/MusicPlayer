@@ -1,10 +1,8 @@
-package com.example.musicplayer.MenuFragment.FragmentAdapter;
+package com.example.musicplayer.MenuFragment.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 
@@ -14,8 +12,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.example.musicplayer.R;
 
 import java.util.ArrayList;
 import java.util.List;
