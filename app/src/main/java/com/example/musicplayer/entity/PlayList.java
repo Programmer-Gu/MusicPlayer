@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class PlayList {
     private String listName;//歌单名
-    private String listPicturePath;//歌单封面路径
+    private Integer listPicturePath;//歌单封面路径
     private Integer owner;//歌单所属用户
     private List<Music> musicList;//歌曲列表
 
@@ -56,11 +56,11 @@ public class PlayList {
         this.listName = listName;
     }
 
-    public String getListPicturePath() {
+    public Integer getListPicturePath() {
         return listPicturePath;
     }
 
-    public void setListPicturePath(String listPicturePath) {
+    public void setListPicturePath(Integer listPicturePath) {
         this.listPicturePath = listPicturePath;
     }
 

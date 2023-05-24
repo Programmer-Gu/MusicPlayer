@@ -10,7 +10,11 @@ import android.widget.Toast;
 
 import com.example.musicplayer.LogHelper.DBLog;
 import com.example.musicplayer.entity.Music;
+import com.example.musicplayer.entity.PlayList;
 import com.example.musicplayer.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -161,7 +165,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String createPlaylistTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_PLAYLIST + "(" +
                 COLUMN_PLAYLIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_PLAYLIST_LIST_NAME + " TEXT," +
-                COLUMN_PLAYLIST_LIST_PICTURE_PATH + " TEXT," +
+                COLUMN_PLAYLIST_LIST_PICTURE_PATH + " INTEGER," +
                 COLUMN_PLAYLIST_OWNER + " INTEGER," +
                 "FOREIGN KEY(" + COLUMN_PLAYLIST_OWNER + ") REFERENCES " + TABLE_USER + "(" + COLUMN_USER_ID + ")" +
                 ")";
@@ -396,12 +400,12 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             int nicknameColumnIndex = cursor.getColumnIndex(COLUMN_USER_NICKNAME);
             int emailColumnIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
-            int headPicturePathIndex=cursor.getColumnIndex(COLUMN_USER_HEAD_PICTURE_PATH);
+            int headPicturePathIndex = cursor.getColumnIndex(COLUMN_USER_HEAD_PICTURE_PATH);
 
             if (nicknameColumnIndex != -1 && emailColumnIndex != -1) {
                 String nickname = cursor.getString(nicknameColumnIndex);
                 String email = cursor.getString(emailColumnIndex);
-                int headPicturePath=cursor.getInt(headPicturePathIndex);
+                int headPicturePath = cursor.getInt(headPicturePathIndex);
                 cursor.close();
                 User user = new User();
                 user.setNickname(nickname);
@@ -417,6 +421,50 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
             DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "用户不存在");
             return null; // 用户不存在
+        }
+    }
+
+    /**
+     * 根据歌曲id查询歌曲对象
+     *
+     * @param musicId 用户id
+     * @return Music对象
+     */
+    public Music getMusicById(int musicId) {
+        String query = "SELECT " + COLUMN_MUSIC_NAME + ", " + COLUMN_MUSIC_SINGER_NAME + ", " + COLUMN_MUSIC_COVER_PATH + ", " + COLUMN_MUSIC_PATH +
+                " FROM " + TABLE_MUSIC +
+                " WHERE " + COLUMN_MUSIC_ID + " = ?";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(musicId)});
+
+        //处理查询结果
+        if (cursor.moveToFirst()) {
+            int musicNameColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_NAME);
+            int singerColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_SINGER_NAME);
+            int musicCoverPathIndex = cursor.getColumnIndex(COLUMN_MUSIC_COVER_PATH);
+            int musicPathIndex = cursor.getColumnIndex(COLUMN_MUSIC_PATH);
+
+            if (musicNameColumnIndex != -1 && singerColumnIndex != -1 && musicCoverPathIndex != -1 && musicPathIndex != -1) {
+                String musicName = cursor.getString(musicNameColumnIndex);
+                String singer = cursor.getString(singerColumnIndex);
+                int musicCoverPath = cursor.getInt(musicCoverPathIndex);
+                int musicPath = cursor.getInt(musicPathIndex);
+                cursor.close();
+                Music music = new Music();
+                music.setMusicName(musicName);
+                music.setSingerName(singer);
+                music.setCoverPath(musicCoverPath);
+                music.setMusicPath(musicPath);
+
+                return music;
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "列索引无效");
+                return null; // 列索引无效
+            }
+        } else {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "音乐不存在");
+            return null; // 音乐不存在
         }
     }
 
@@ -470,6 +518,75 @@ public class DBHelper extends SQLiteOpenHelper {
             DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户头像路径更改失败，有" + rowsAffected + "行数据被修改");
         }
         return rowsAffected;
+    }
+
+    /**
+     * 根据歌单id构造歌单对象
+     *
+     * @param playlistId 歌曲列表id
+     * @return 数据库user表中被修改的行数
+     */
+    public PlayList findMusicListById(int playlistId) {
+
+        //创建歌单对象
+        PlayList playList = new PlayList();
+        //查询歌单的相关信息
+        String query = "SELECT " + COLUMN_PLAYLIST_LIST_NAME + ", " + COLUMN_PLAYLIST_LIST_PICTURE_PATH +
+                " FROM " + TABLE_PLAYLIST +
+                " WHERE " + COLUMN_PLAYLIST_ID + " = ?";
+
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(playlistId)});
+
+        //处理查询结果
+        if (cursor.moveToFirst()) {
+            int playListNameColumnIndex = cursor.getColumnIndex(COLUMN_PLAYLIST_LIST_NAME);
+            int playListPicturePathColumnIndex = cursor.getColumnIndex(COLUMN_PLAYLIST_LIST_PICTURE_PATH);
+
+
+            if (playListNameColumnIndex != -1 && playListPicturePathColumnIndex != -1) {
+                String listName = cursor.getString(playListNameColumnIndex);
+                int picturePath = cursor.getInt(playListPicturePathColumnIndex);
+
+                cursor.close();
+                playList.setListName(listName);
+                playList.setListPicturePath(picturePath);
+                List<Music> musicList = new ArrayList<>();
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_PLAYLIST, "列索引无效");
+                return null; // 列索引无效
+            }
+        } else {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_PLAYLIST, "歌单不存在");
+            return null; // 歌单不存在
+        }
+
+        //查询歌单所包含的歌
+        query = "SELECT " + COLUMN_MUSIC_ID +
+                " FROM " + TABLE_PLAYLIST_SONG +
+                " WHERE " + COLUMN_PLAYLIST_ID + " = ?";
+        cursor = mRDB.rawQuery(query, new String[]{String.valueOf(playlistId)});
+
+
+        //处理查询结果
+        while (cursor.moveToNext()) {
+
+            int musicIdColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
+
+
+            if (musicIdColumnIndex != -1) {
+                int musicId = cursor.getInt(musicIdColumnIndex);
+                Music tmp_music = dbHelper.getMusicById(musicId);
+                playList.getMusicList().add(tmp_music);
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_PLAYLIST_SONG, "列索引无效");
+                return null; // 列索引无效
+            }
+        }
+
+        return playList;
     }
 
 
