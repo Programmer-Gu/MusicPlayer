@@ -30,6 +30,9 @@
             android:name=".RegActivity"
             android:exported="true" />
         <activity
+            android:name=".SongListActivity"
+            android:exported="true" />
+        <activity
             android:name=".StartActivity"
             android:exported="true">
             <intent-filter>

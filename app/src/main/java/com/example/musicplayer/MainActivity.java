@@ -140,7 +140,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             @Override
             //页面滚动事件
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             //页面选中事件
