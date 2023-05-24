@@ -2,7 +2,6 @@ package com.example.musicplayer;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -166,13 +165,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //根据点击的Tab设置对应的ImageButton为绿色
         switch (i) {
             case 0:
-                mImg1.setImageResource(R.drawable.house_door);
+                mImg1.setImageResource(R.drawable.icon);
                 break;
             case 1:
-                mImg2.setImageResource(R.drawable.music_note_list);
+                mImg2.setImageResource(R.drawable.music_list_1);
                 break;
             case 2:
-                mImg3.setImageResource(R.drawable.person_circle);
+                mImg3.setImageResource(R.drawable.my_info_1);
                 break;
         }
         //设置当前点击的Tab所对应的页面
@@ -194,8 +193,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     //将三个ImageButton置为灰色
     private void resetImgs() {
-        mImg1.setImageResource(R.drawable.house_door);
-        mImg2.setImageResource(R.drawable.music_note_list);
-        mImg3.setImageResource(R.drawable.person_circle);
+        mImg1.setImageResource(R.drawable.icon_2);
+        mImg2.setImageResource(R.drawable.music_list_2);
+        mImg3.setImageResource(R.drawable.my_info_2);
     }
 }
