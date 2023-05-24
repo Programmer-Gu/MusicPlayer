@@ -6,11 +6,14 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.util.Log;
 
 
+import com.example.musicplayer.MusicPlayerActivity;
+import com.example.musicplayer.R;
 import com.example.musicplayer.entity.Music;
 
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -23,12 +26,27 @@ public class MusicService extends Service {
     private Timer timer; //声明一个计时器引用
     private LinkedList<Music> musicList;
     private ListIterator<Music> listIterator;
+    private Thread songThread;
 
     /**
      * 无参构造方法
      */
-    private MusicService() {
+    public MusicService() {
         musicList = new LinkedList<>();
+
+        Music music1 = new Music();
+        music1.setMusicName("起风了");
+        music1.setMusicPath(R.raw.qifengle);
+        music1.setCoverPath(R.drawable.heart_red);
+        music1.setSingerName("卖辣椒也用券");
+        musicList.add(music1);
+        Music music2 = new Music();
+        music2.setMusicName("屋顶");
+        music2.setMusicPath(R.raw.wuding);
+        music2.setCoverPath(R.drawable.heart_red);
+        music2.setSingerName("null");
+        musicList.add(music2);
+        listIterator = musicList.listIterator();
     }
 
     @Override
@@ -40,13 +58,13 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         //创建音乐播放器对象
-        player = new MediaPlayer();
+        player = null;
     }
 
     /**
      * //添加计时器用于设置音乐播放器中的播放进度条
      */
-    public void addTimer() {
+    public void addTimer( Music nowMusic ) {
         if (timer == null) {
             //创建计时器对象
             timer = new Timer();
@@ -56,6 +74,7 @@ public class MusicService extends Service {
                 if (player == null) return;
                 int duration = player.getDuration();//获取歌曲总时长
                 int currentPosition = player.getCurrentPosition();//获取播放进度
+                Message msg= MusicPlayerActivity.handler.obtainMessage();//创建消息对象
 
                 //todo 先写MusicPlayerActivity
 //                    Message msg= MusicPlayerActivity.handler.obtainMessage();//创建消息对象
@@ -63,15 +82,24 @@ public class MusicService extends Service {
                 Bundle bundle = new Bundle();
                 bundle.putInt("duration", duration);
                 bundle.putInt("currentPosition", currentPosition);
+                bundle.putInt("cover",  nowMusic.getCoverPath());
+                bundle.putString("songName", nowMusic.getMusicName());
                 //再将bundle封装到msg消息对象中
-
-                //最后将消息发送到主线程的消息队列中
+                msg.setData(bundle);
+                //最后将消息发送到主线程的消息队列
+                MusicPlayerActivity.handler.sendMessage(msg);
                 }
             };
             timer.schedule(timerTask, 5,500);
         }
     }
 
+    public void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
 
     /**
      * 内部类：跨进程通信音乐信息的辅助类
@@ -82,35 +110,68 @@ public class MusicService extends Service {
            for( Music f : inputMusicList ){
                musicList.add(f);
            }
-           listIterator = inputMusicList.listIterator();
+           listIterator = musicList.listIterator();
        }
+
         public void play() {
-            while ( listIterator.hasNext() ){
-                nextMusic();
-            }
+           if( songThread != null ){
+               songThread.interrupt();
+               songThread = null;
+           }
+
+            songThread = new Thread(() -> {
+                while ( listIterator.hasNext() && !Thread.interrupted() ){
+                    if( player == null || player.getDuration() <= player.getCurrentPosition() ){
+                        nextMusic();
+                    }
+                    else{
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            Log.d("gzc", "线程停止");
+                        }
+                    }
+                }
+            });
+            songThread.start();
         }
         //调用MediaPlayer自带的方法实现音乐的暂停、继续和退出
 
         public void nextMusic(){
+           stopTimer();
             if( listIterator.hasNext() ){
-                player.reset();
-                player.setAudioSessionId(listIterator.next().getMusicPath());
+                if( player != null ){
+                    player.reset();
+                }
+                Music nowMusic = listIterator.next();
+                player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
-                addTimer();//添加计时器
+                addTimer(nowMusic);//添加计时器
             }
         }
 
         public void previousMusic(){
+           stopTimer();
             if( listIterator.hasPrevious() ){
-                player.reset();
-                player.setAudioSessionId(listIterator.previous().getMusicPath());
+                if( player != null ){
+                    player.reset();
+                }
+                Music nowMusic = listIterator.previous();
+                player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
-                addTimer();//添加计时器
+                addTimer(nowMusic);//添加计时器
             }
         }
 
         public boolean getMusicState(){
+           if( musicIsNull() ){
+               return false;
+           }
            return player.isPlaying();
+        }
+
+        public boolean musicIsNull(){
+           return player == null;
         }
 
         /**
@@ -135,12 +196,17 @@ public class MusicService extends Service {
         }
     }
 
+
     //销毁多媒体播放器
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (player == null) return;
-        if (player.isPlaying()) player.stop();//停止播放音乐
+        if (player == null){
+            return;
+        }
+        if (player.isPlaying()){
+            player.stop();//停止播放音乐
+        }
         player.release();//释放占用的资源
         player = null; //player置为空
     }

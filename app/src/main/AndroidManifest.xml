@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer"
         tools:targetApi="31">
+        <service android:name=".Service.MusicService"
+            android:exported="true"
+            android:enabled="true"/>
         <activity
             android:name=".MusicListActivity"
             android:exported="false" />

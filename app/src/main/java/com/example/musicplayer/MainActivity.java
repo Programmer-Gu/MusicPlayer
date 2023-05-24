@@ -2,15 +2,17 @@ package com.example.musicplayer;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -20,12 +22,14 @@ import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.CategoryFragment;
 import com.example.musicplayer.MenuFragment.HomeFragment;
 import com.example.musicplayer.MenuFragment.PersonalFragment;
+import com.example.musicplayer.Service.MusicService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
+    public static MusicService.MusicControl musicControl;
     //声明ViewPager
     private ViewPager mViewPager;
     //适配器
@@ -33,23 +37,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //装载Fragment的集合
     private List<Fragment> mFragments;
     //声明三个Tab的布局文件
-    private LinearLayout mTab1;
-    private LinearLayout mTab2;
-    private LinearLayout mTab3;
-
+    private LinearLayout mTab1, mTab2, mTab3;
     //声明三个Tab的ImageButton
-    private ImageButton mImg1;
-    private ImageButton mImg2;
-    private ImageButton mImg3;
-
-    //声明三个Tab分别对应的Fragment
-    private Fragment mFrag1;
-    private Fragment mFrag2;
-    private Fragment mFrag3;
-
+    private ImageButton mImg1, mImg2, mImg3, toStartMusic, musicPlayer;
     private DBHelper dbHelper;
-
     private SharedPreferences sharedPreferences;
+    private ServiceConnection conn;
+    private Intent serviceIntent;
+    private boolean isUnbind;
 
     @Override
     protected void onStart() {
@@ -69,6 +64,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         initViews();//初始化控件
         initEvents();//初始化事件
         initDatas();//初始化数据
+        initService();//初始化服务
 
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
         //查询登录状态，如果没有登录，跳转到登录界面
@@ -84,6 +80,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mTab1.setOnClickListener(this);
         mTab2.setOnClickListener(this);
         mTab3.setOnClickListener(this);
+        toStartMusic.setOnClickListener(this);
+        musicPlayer.setOnClickListener(this);
     }
 
     private void initViews() {
@@ -97,9 +95,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mImg1 = (ImageButton) findViewById(R.id.id_tab_img1);
         mImg2 = (ImageButton) findViewById(R.id.id_tab_img2);
         mImg3 = (ImageButton) findViewById(R.id.id_tab_img3);
+
+        toStartMusic = findViewById(R.id.music_image);
+        musicPlayer = findViewById(R.id.button_player);
     }
 
     private void initDatas() {
+        isUnbind = false;
+
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
         mFragments.add(new HomeFragment(MainActivity.this));
@@ -144,6 +147,24 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
+    public void initService(){
+        conn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                musicControl = (MusicService.MusicControl) iBinder;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                Log.d("gzc", "服务连接失败");
+            }
+        };//创建服务连接对象
+        serviceIntent = new Intent(MainActivity.this,MusicService.class);
+        bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
+    }
+
+
+
     //处理Tab的点击事件
     @Override
     public void onClick(View v) {
@@ -157,6 +178,23 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.id_tab3:
                 selectTab(2);
+                break;
+            case R.id.button_player:
+                if( musicControl.getMusicState() ){
+                    musicPlayer.setImageResource(R.drawable.ic_play);
+                    musicControl.pausePlay();
+                }
+                else{
+                    musicPlayer.setImageResource(R.drawable.ic_stop);
+                    if( !musicControl.musicIsNull() ){
+                        musicControl.continuePlay();
+                    }
+                    musicControl.play();
+                }
+                break;
+            case R.id.music_image:
+                Intent intent = new Intent( MainActivity.this, MusicPlayerActivity.class );
+                startActivity(intent);
                 break;
         }
     }
@@ -179,23 +217,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mViewPager.setCurrentItem(i);
     }
 
-    //将三个的Fragment隐藏
-    private void hideFragments(FragmentTransaction transaction) {
-        if (mFrag1 != null) {
-            transaction.hide(mFrag1);
-        }
-        if (mFrag2 != null) {
-            transaction.hide(mFrag2);
-        }
-        if (mFrag3 != null) {
-            transaction.hide(mFrag3);
-        }
-    }
-
     //将三个ImageButton置为灰色
     private void resetImgs() {
         mImg1.setImageResource(R.drawable.house_door);
         mImg2.setImageResource(R.drawable.music_note_list);
         mImg3.setImageResource(R.drawable.person_circle);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isUnbind) {
+            musicControl.pausePlay();
+            unbindService(conn);
+        }
     }
 }
