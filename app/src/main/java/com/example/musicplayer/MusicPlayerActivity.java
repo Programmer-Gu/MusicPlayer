@@ -155,7 +155,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     animator.start();
                 }
                 break;
-
             // TODO: 2023/5/22 点击播放音乐后，创建播放音乐列表，在里面进行上一首下一首的操作
             case R.id.btn_previous:
                 musicControl.previousMusic();

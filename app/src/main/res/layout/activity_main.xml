@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -22,13 +22,8 @@
     <View android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:alpha="0.6"
-        android:background="@android:color/darker_gray"
-        android:layout_above="@id/music_tab"/>
+        android:background="@android:color/darker_gray" />
 
-    <include layout="@layout/custom_tab_layout"
-        android:id="@+id/music_tab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+    <include layout="@layout/custom_tab_layout"/>
 
-</RelativeLayout>
+</LinearLayout>

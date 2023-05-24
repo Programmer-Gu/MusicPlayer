@@ -26,7 +26,7 @@
             android:id="@+id/song_cover"
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/wuding" />
     </androidx.cardview.widget.CardView>
 
 

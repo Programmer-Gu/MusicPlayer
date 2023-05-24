@@ -163,8 +163,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-
-
     //处理Tab的点击事件
     @Override
     public void onClick(View v) {

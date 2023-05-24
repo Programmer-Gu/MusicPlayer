@@ -37,7 +37,7 @@ public class MusicService extends Service {
         Music music1 = new Music();
         music1.setMusicName("起风了");
         music1.setMusicPath(R.raw.qifengle);
-        music1.setCoverPath(R.drawable.heart_red);
+        music1.setCoverPath(R.drawable.btn_circle);
         music1.setSingerName("卖辣椒也用券");
         musicList.add(music1);
         Music music2 = new Music();
@@ -46,6 +46,12 @@ public class MusicService extends Service {
         music2.setCoverPath(R.drawable.heart_red);
         music2.setSingerName("null");
         musicList.add(music2);
+        Music music3 = new Music();
+        music3.setMusicName("起风了");
+        music3.setMusicPath(R.raw.qifengle);
+        music3.setCoverPath(R.drawable.btn_circle);
+        music3.setSingerName("卖辣椒也用券");
+        musicList.add(music3);
         listIterator = musicList.listIterator();
     }
 
@@ -139,6 +145,10 @@ public class MusicService extends Service {
 
         public void nextMusic(){
            stopTimer();
+            if( songThread != null ){
+                songThread.interrupt();
+                songThread = null;
+            }
             if( listIterator.hasNext() ){
                 if( player != null ){
                     player.reset();
@@ -152,10 +162,15 @@ public class MusicService extends Service {
 
         public void previousMusic(){
            stopTimer();
+            if( songThread != null ){
+                songThread.interrupt();
+                songThread = null;
+            }
             if( listIterator.hasPrevious() ){
                 if( player != null ){
                     player.reset();
                 }
+                listIterator.previous();
                 Music nowMusic = listIterator.previous();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
