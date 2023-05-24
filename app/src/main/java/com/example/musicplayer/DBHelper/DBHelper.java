@@ -194,7 +194,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    // 向用户表中插入数据
+    /**
+     * 向用户表中插入数据
+     *
+     * @param user
+     * @return
+     */
     public long insertUser(User user) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_EMAIL, user.getUser_email());
@@ -207,12 +212,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // 向音乐表中插入数据
+    /**
+     * 向音乐表中插入数据
+     *
+     * @param music
+     * @return
+     */
     public long insertMusic(Music music) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_MUSIC_NAME, music.getMusicName());
         values.put(COLUMN_MUSIC_SINGER_NAME, music.getSingerName());
-
+        values.put(COLUMN_MUSIC_COVER_PATH, music.getMusicPath());
+        values.put(COLUMN_MUSIC_COVER_PATH, music.getCoverPath());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_MUSIC, null, values);
         db.close();
@@ -221,7 +232,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // 向歌单表中插入数据
+    /**
+     * 向歌单表中插入数据
+     *
+     * @param listName
+     * @param listPicturePath
+     * @param owner
+     * @return
+     */
     public long insertPlaylist(String listName, String listPicturePath, long owner) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PLAYLIST_LIST_NAME, listName);
@@ -235,7 +253,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // 向歌单歌曲表中插入数据
+    /**
+     * 向歌单歌曲表中插入数据
+     *
+     * @param playlistId
+     * @param musicId
+     * @return
+     */
     public long insertPlaylistSong(long playlistId, long musicId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PLAYLIST_ID, playlistId);
@@ -248,7 +272,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // 向用户歌单表中插入数据
+    /**
+     * 向用户歌单表中插入数据
+     *
+     * @param userId
+     * @param playlistId
+     * @return
+     */
     public long insertUserPlaylist(long userId, long playlistId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_ID, userId);
@@ -389,12 +419,37 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
+     * 根据用户id修改用户昵称
+     *
+     * @param userId      用户id
+     * @param newNickname 用户要修改的昵称
+     * @return 数据库user表中被修改的行数
+     */
+    public int updateNicknameById(int userId, String newNickname) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_NICKNAME, newNickname);
+
+        String whereClause = COLUMN_USER_ID + " = ?";
+        String[] whereArgs = {String.valueOf(userId)};
+
+        int rowsAffected = mWDB.update(TABLE_USER, values, whereClause, whereArgs);
+
+        if (rowsAffected == 1) {
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户"+userId+"昵称更改成功");
+        } else {
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户昵称更改失败，有"+rowsAffected+"行数据被修改");
+        }
+        return rowsAffected;
+    }
+
+
+    /**
      * toast消息辅助方法
      *
      * @param context
      * @param message
      */
-    private void showToast(Context context, String message) {
+    public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 

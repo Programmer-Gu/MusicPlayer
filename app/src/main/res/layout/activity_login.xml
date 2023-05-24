@@ -3,24 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f8f8f8"
-
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
 
     <Button
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#ff0000"
         android:padding="8dp"
-        android:text="&lt;返回" />
+        android:text="&lt; 返回" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_back"
-
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:padding="16dp"
@@ -56,23 +54,62 @@
         android:padding="16dp"
         android:textColor="@color/black" />
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layout_reg"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_password"
-        android:text="立即注册" />
+        android:layout_below="@id/et_password"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingEnd="20dp"
+            android:text="还没有账号？快去注册 &gt;&gt;&gt;" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="立即注册" />
+    </LinearLayout>
+
 
     <Button
+
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_password"
+        android:layout_above="@+id/layout_privacy"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="#ff0000"
-
+        android:layout_marginBottom="40dp"
         android:text="登录"
-        android:textColor="#ffffff" />
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:id="@+id/layout_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
+
+        <CheckBox
+            android:id="@+id/ck_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我同意" />
+
+        <TextView
+            android:id="@+id/tv_privacy_policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户隐私协议"
+            android:textColor="@color/purple_700" />
+    </LinearLayout>
 
 </RelativeLayout>

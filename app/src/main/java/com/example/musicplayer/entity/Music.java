@@ -10,6 +10,10 @@ public class Music {
     private String musicName;//歌名
     private String singerName;//歌手名
 
+    private Integer musicPath;//歌曲路径
+
+    private Integer coverPath;//封面路径
+
 
     public Music() {
 
@@ -35,6 +39,20 @@ public class Music {
         this.singerName = singerName;
     }
 
+    public Integer getMusicPath() {
+        return musicPath;
+    }
 
+    public void setMusicPath(Integer musicPath) {
+        this.musicPath = musicPath;
+    }
+
+    public Integer getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(Integer coverPath) {
+        this.coverPath = coverPath;
+    }
 
 }

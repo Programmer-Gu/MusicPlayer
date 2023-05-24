@@ -47,22 +47,11 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_music_player);
 
         //获取从frag1传来的消息（音乐的选择列表）
-        Intent intent1 = getIntent();
+        intent1 = getIntent();
         init();
     }
 
-    //    public static Handler handler=new Handler(){
-//        @SuppressLint("HandlerLeak")
-//        @Override
-//        public  void handlerMessage(Message msg){
-//            Bundle bundle=msg.getData();//获取子线程发送过来的音乐播放进度
-//            //获取当前进度currentPosition和总市场duration
-//            int duration=bundle.getInt("duration");
-//            int currentPosition=bundle.getInt("currentPosition");
-//
-//
-//        }
-//    };
+
     private void init() {
         tv_progress = findViewById(R.id.tv_progress);
         tv_total = findViewById(R.id.tv_total);
@@ -172,6 +161,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     btn_play_pause.setImageResource(R.drawable.ic_stop);
 
+                    //获取到音乐播放的位置
                     String position = intent1.getStringExtra("position");
                     int i = Integer.parseInt(position);
                     musicControl.play(i);
@@ -181,7 +171,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 isPlaying = !isPlaying;
                 break;
 
-            // TODO: 2023/5/22 点击播放音乐后，创建播放音乐列表，在里面进行上一首下一首的操作
+            // TODO: 2023/5/22 点击播放音乐后，在里面进行上一首下一首的操作
             case R.id.btn_previous:
             case R.id.btn_next:
                 break;

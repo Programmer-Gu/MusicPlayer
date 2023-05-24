@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 
+
+import com.example.musicplayer.MusicPlayerActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,42 +40,13 @@ public class MusicService extends Service {
         player = new MediaPlayer();
     }
 
-    /**
-     * //添加计时器用于设置音乐播放器中的播放进度条
-     */
-    public void addTimer() {
-        if (timer == null) {
-            //创建计时器对象
-            timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    if (player == null) return;
-                    int duration = player.getDuration();//获取歌曲总时长
-                    int currentPosition = player.getCurrentPosition();//获取播放进度
-
-                    //todo 先写MusicPlayerActivity
-//                    Message msg= MusicPlayerActivity.handler.obtainMessage();//创建消息对象
-                    //将音乐的总时长和播放进度封装至bundle中
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("duration", duration);
-                    bundle.putInt("currentPosition", currentPosition);
-                    //再将bundle封装到msg消息对象中
-
-                    //最后将消息发送到主线程的消息队列中
-                }
-            };
-            timer.schedule(timerTask, 5,500);
-        }
-    }
-
 
     /**
      * 内部类：跨进程通信音乐信息的辅助类
      */
-   public class MusicControl extends Binder {
+    public class MusicControl extends Binder {
         public void play(int i) {
-            Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + "music" + i);
+            Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/" + "qifengle");
             try {
                 //重置音乐播放器
                 player.reset();
@@ -106,6 +80,34 @@ public class MusicService extends Service {
          */
         public void seekTo(int progress) {
             player.seekTo(progress);
+        }
+    }
+
+    /**
+     * //添加计时器用于设置音乐播放器中的播放进度条
+     */
+    public void addTimer() {
+        if (timer == null) {
+            //创建计时器对象
+            timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if (player == null) return;
+                    int duration = player.getDuration();//获取歌曲总时长
+                    int currentPosition = player.getCurrentPosition();//获取播放进度
+
+                    Message msg = MusicPlayerActivity.handler.obtainMessage();//创建消息对象
+                    //将音乐的总时长和播放进度封装至bundle中
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("duration", duration);
+                    bundle.putInt("currentPosition", currentPosition);
+                    //再将bundle封装到msg消息对象中
+
+                    //最后将消息发送到主线程的消息队列中
+                }
+            };
+            timer.schedule(timerTask, 5, 500);
         }
     }
 
