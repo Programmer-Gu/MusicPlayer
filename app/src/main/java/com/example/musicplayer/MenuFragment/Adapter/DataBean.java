@@ -28,10 +28,10 @@ public class DataBean {
         List<DataBean> list = new ArrayList<>();
         list.add(new DataBean(R.drawable.house_door, "相信自己,你努力的样子真的很美", 1));
         list.add(new DataBean(R.drawable.music_note_list, "极致简约,梦幻小屋", 3));
-        list.add(new DataBean(R.drawable.person_circle, "超级卖梦人", 3));
+        list.add(new DataBean(R.drawable.my_info_1, "超级卖梦人", 3));
         list.add(new DataBean(R.drawable.house_door, "夏季新搭配", 1));
         list.add(new DataBean(R.drawable.music_note_list, "绝美风格搭配", 1));
-        list.add(new DataBean(R.drawable.person_circle, "微微一笑 很倾城", 3));
+        list.add(new DataBean(R.drawable.my_info_1, "微微一笑 很倾城", 3));
         return list;
     }
 

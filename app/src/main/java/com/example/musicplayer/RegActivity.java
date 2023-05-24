@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.FocusFinder;
@@ -17,6 +18,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
     private EditText et_password;
     private EditText et_confirmPassword;
     private DBHelper dbHelper;
+    private Intent intent;
 
     @Override
     protected void onStart() {
@@ -64,12 +66,20 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(this, "输入密码和重复密码不同", Toast.LENGTH_LONG).show();
                     return;
                 }
+                //判断输入的是不是邮箱
+                if (!isValidEmail(email)) {
+                    Toast.makeText(this, "您输入的不是邮箱~", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 boolean result = dbHelper.registerUser(email, password);
                 if (result) {
-                    Toast.makeText(this, "注册成功，赶快去登录叭！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "注册成功，赶快去登录叭~", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    Toast.makeText(this, "您的邮箱已经注册过啦！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "您的邮箱已经注册过啦，现在就登陆叭~", Toast.LENGTH_SHORT).show();
                 }
+                intent = new Intent(RegActivity.this, LoginActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_back:
                 //返回按钮点击事件
@@ -77,4 +87,19 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
+    /**
+     * 判断用户输入的是不是邮箱
+     *
+     * @param input
+     * @return
+     */
+    public boolean isValidEmail(String input) {
+        // 定义邮箱正则表达式
+        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+        // 判断输入是否符合邮箱正则表达式
+        return input.matches(emailRegex);
+    }
+
 }

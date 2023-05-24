@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicPlayer</string>
+    <string name="app_name">闻歌</string>
     <string name="title_activity_main2">MainActivity2</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -11,4 +11,52 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="privacy_policy">隐私协议\n
+
+欢迎使用我们的音乐播放器应用！我们非常重视您的个人信息和隐私保护。在您使用我们的应用之前，请仔细阅读本隐私协议，了解我们对您个人信息的收集、使用、存储和保护方式。\n
+\n
+1. 信息收集和使用\n
+\n
+1.1 收集的信息\n
+\n
+我们可能会收集以下与您相关的信息：\n
+\n
+- 设备信息：包括设备型号、操作系统版本、唯一设备标识符等。\n
+- 用户日志：包括应用使用日志、崩溃日志等，用于改进应用性能和故障排查。\n
+- 用户提供的信息：当您使用应用的某些功能或服务时，我们可能会要求您提供个人信息，例如创建账户时需要您提供邮箱地址和密码。\n
+\n
+1.2 信息使用\n
+\n
+我们可能会将收集的信息用于以下目的：\n
+\n
+- 向您提供服务：例如播放音乐、创建和管理用户账户等。\n
+- 改进和优化应用：我们会分析和利用收集的信息来改善应用的功能、性能和用户体验。\n
+- 发送通知和促销信息：在获得您的同意的情况下，我们可能会向您发送应用更新、新功能介绍、促销活动等相关信息。\n
+\n
+2. 信息存储和保护\n
+\n
+我们将采取必要的技术和组织措施来保护您的个人信息的安全。我们会采用合理的安全措施来防止信息的丢失、滥用、未经授权访问或披露、被篡改或损坏。\n
+\n
+3. 信息共享\n
+\n
+我们不会将您的个人信息转让、出售或共享给任何第三方，除非符合以下情况：\n
+\n
+- 获得您的同意：在获得您的明确同意之下，我们才会共享您的个人信息。\n
+- 法律要求：我们可能会根据法律规定或政府部门的要求，共享您的个人信息。\n
+\n
+4. 用户权利和选择\n
+\n
+- 访问和更正个人信息：您有权访问和更正您的个人信息。\n
+- 注销和删除个人信息：您可以随时注销和删除您的个人信息。\n
+\n
+5. 其他说明\n
+\n
+我们的隐私政策可能会不定期更新，我们将在应用中通知您重要的隐私政策变更。请您定期查阅隐私政策，以了解最新的隐私保护措施。\n
+\n
+如果您对我们的隐私政策有任何疑问或意见，请随时与我们联系。\n
+\n
+感谢您信任和使用我们的音乐播放器应用！\n
+
+</string>
 </resources>

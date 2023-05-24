@@ -5,28 +5,30 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/id_tab1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/id_tab1"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/id_tab_img1"
-            android:clickable="false"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/house_door"
+            android:background="#00000000"
+            android:clickable="false"
+            android:padding="5dp"
             android:scaleType="fitStart"
-            android:background="#00000000"/>
+            android:src="@drawable/icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="页面1"/>
+            android:text="发现"
+            android:textColor="@color/black" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/id_tab2"
         android:layout_width="0dp"
@@ -37,18 +39,21 @@
 
         <ImageButton
             android:id="@+id/id_tab_img2"
-            android:clickable="false"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:padding="5dp"
             android:scaleType="fitStart"
-            android:src="@drawable/music_note_list"
-            android:background="#00000000"/>
+            android:src="@drawable/music_list_2" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="页面2"/>
+            android:text="歌单"
+            android:textColor="@color/black" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/id_tab3"
         android:layout_width="0dp"
@@ -59,16 +64,18 @@
 
         <ImageButton
             android:id="@+id/id_tab_img3"
-            android:clickable="false"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="#00000000"
+            android:clickable="false"
+            android:padding="6dp"
             android:scaleType="fitStart"
-            android:src="@drawable/person_circle"
-            android:background="#00000000"/>
+            android:src="@drawable/my_info_2" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="页面3"/>
+            android:text="个人"
+            android:textColor="@color/black" />
     </LinearLayout>
 </LinearLayout>

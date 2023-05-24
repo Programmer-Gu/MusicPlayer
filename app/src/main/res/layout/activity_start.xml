@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon" />
+
+    <ImageView
+        android:id="@+id/appName"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@+id/icon"
+        android:layout_marginTop="-5dp"
+        android:src="@drawable/appname" />
+
+    <!-- 这里可以添加其他启动画面的布局元素 -->
+
+</RelativeLayout>
