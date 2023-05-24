@@ -24,9 +24,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/bounder"
-                android:orientation="horizontal"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="5dp">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/id_tab_img3"

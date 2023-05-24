@@ -179,7 +179,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mViewPager.setCurrentItem(i);
     }
 
-    //将四个的Fragment隐藏
+    //将三个的Fragment隐藏
     private void hideFragments(FragmentTransaction transaction) {
         if (mFrag1 != null) {
             transaction.hide(mFrag1);
@@ -192,7 +192,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    //将四个ImageButton置为灰色
+    //将三个ImageButton置为灰色
     private void resetImgs() {
         mImg1.setImageResource(R.drawable.house_door);
         mImg2.setImageResource(R.drawable.music_note_list);

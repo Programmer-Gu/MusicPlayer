@@ -8,25 +8,22 @@
     android:layout_marginRight="5dp"
     android:padding="6dp">
 
-    <TextView
-        android:id="@+id/sing_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/music_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:text="1"
-        android:textSize="18sp"
-        android:textColor="@color/black"/>
+        android:scaleType="centerInside"
+        android:src="@drawable/house_door"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/iv"
-        android:layout_centerVertical="true">
+        android:layout_marginLeft="10dp">
+
         <TextView
-            android:id="@+id/item_name"
+            android:id="@+id/music_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="歌曲名称"
@@ -34,11 +31,12 @@
             android:textColor="#000000"/>
 
         <TextView
+            android:id="@+id/singer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="作者名"
             android:textSize="12sp"
-            android:layout_below="@id/item_name"/>
+            android:layout_below="@id/music_name"/>
 
         <ImageButton
             android:id="@+id/heart"
