@@ -52,6 +52,18 @@ public class MusicService extends Service {
         music3.setCoverPath(R.drawable.btn_circle);
         music3.setSingerName("卖辣椒也用券");
         musicList.add(music3);
+        Music music4 = new Music();
+        music4.setMusicName("屋顶");
+        music4.setMusicPath(R.raw.wuding);
+        music4.setCoverPath(R.drawable.heart_red);
+        music4.setSingerName("null");
+        musicList.add(music4);
+        Music music5 = new Music();
+        music5.setMusicName("起风了");
+        music5.setMusicPath(R.raw.qifengle);
+        music5.setCoverPath(R.drawable.btn_circle);
+        music5.setSingerName("卖辣椒也用券");
+        musicList.add(music5);
         listIterator = musicList.listIterator();
     }
 
@@ -78,6 +90,7 @@ public class MusicService extends Service {
                 @Override
                 public void run() {
                 if (player == null) return;
+                if( !MusicPlayerActivity.ifAlive ) return;
                 int duration = player.getDuration();//获取歌曲总时长
                 int currentPosition = player.getCurrentPosition();//获取播放进度
                 Message msg= MusicPlayerActivity.handler.obtainMessage();//创建消息对象
@@ -144,14 +157,17 @@ public class MusicService extends Service {
         //调用MediaPlayer自带的方法实现音乐的暂停、继续和退出
 
         public void nextMusic(){
-           stopTimer();
             if( songThread != null ){
                 songThread.interrupt();
                 songThread = null;
             }
             if( listIterator.hasNext() ){
+                stopTimer();
                 if( player != null ){
                     player.reset();
+                }
+                if( !listIterator.hasPrevious() ){
+                    listIterator.next();
                 }
                 Music nowMusic = listIterator.next();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
@@ -170,7 +186,9 @@ public class MusicService extends Service {
                 if( player != null ){
                     player.reset();
                 }
-                listIterator.previous();
+                if( !listIterator.hasNext() ){
+                    listIterator.previous();
+                }
                 Music nowMusic = listIterator.previous();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();

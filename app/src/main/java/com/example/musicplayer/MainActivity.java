@@ -57,6 +57,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     @Override
+    protected void  onResume() {
+        super.onResume();
+        if( musicControl == null )return;
+        if( musicControl.getMusicState() ){
+            musicPlayer.setImageResource(R.drawable.ic_stop);
+        }
+        else{
+            musicPlayer.setImageResource(R.drawable.ic_play);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);

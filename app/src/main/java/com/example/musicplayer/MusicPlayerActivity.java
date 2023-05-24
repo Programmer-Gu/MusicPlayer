@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.musicplayer.Service.MusicService;
 
 public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener {
+    public static boolean ifAlive;
     //进度条
     private static SeekBar seekBar;
     private static TextView tv_progress, tv_total, tv_songName;
@@ -39,6 +40,19 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         //获取从frag1传来的消息（音乐的选择列表）
         intent = getIntent();
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ifAlive = true;
+        if( musicControl == null )return;
+        if( musicControl.getMusicState() ){
+            btn_play_pause.setImageResource(R.drawable.ic_stop);
+        }
+        else{
+            btn_play_pause.setImageResource(R.drawable.ic_play);
+        }
     }
 
     private void init() {
@@ -80,7 +94,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 musicControl.seekTo(progress);
             }
         });
-
 
         animator = ObjectAnimator.ofFloat(songCover, "rotation", 0f, 360.0f);
         animator.setDuration(10000);//动画旋转一周的时间为10秒
@@ -158,9 +171,18 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             // TODO: 2023/5/22 点击播放音乐后，创建播放音乐列表，在里面进行上一首下一首的操作
             case R.id.btn_previous:
                 musicControl.previousMusic();
+                btn_play_pause.setImageResource(R.drawable.ic_stop);
+                break;
             case R.id.btn_next:
                 musicControl.nextMusic();
+                btn_play_pause.setImageResource(R.drawable.ic_stop);
                 break;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ifAlive = false;
     }
 }
