@@ -2,14 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f8f8f8">
+    android:background="@color/background"
+    android:padding="10dp">
 
     <Button
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
         android:text="返回"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="17sp" />
 
 
     <TextView
@@ -21,7 +24,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="用户注册"
-        android:textColor="@color/black"
+        android:textColor="@color/font"
         android:textSize="24sp" />
 
     <EditText
@@ -32,7 +35,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:background="#ffffff"
+        android:background="@color/input"
         android:hint="邮箱"
         android:padding="16dp"
         android:textColor="@color/black" />
@@ -45,7 +48,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:background="#ffffff"
+        android:background="@color/input"
         android:hint="密码"
         android:inputType="textPassword"
         android:padding="16dp"
@@ -59,7 +62,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:background="#ffffff"
+        android:background="@color/input"
         android:hint="确认密码"
         android:inputType="textPassword"
         android:padding="16dp"
@@ -72,8 +75,10 @@
         android:layout_below="@+id/et_confirmPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+        android:background="@drawable/btn_background"
         android:padding="16dp"
         android:text="注册"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="17sp" />
 
 </RelativeLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="transparent_white">#80FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="btn_red">#DD4343</color>
     <color name="btn_background">#979797</color>
 
@@ -12,5 +12,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+
+    <color name="font">#7E9F57</color>
+    <color name="icon">#B4CD66</color>
+    <color name="background">#EEF2E3</color>
+    <color name="input">#F5FFDA</color>
 
 </resources>

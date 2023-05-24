@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/music_bg"
-    android:gravity="center"
+    android:background="@color/background"
     android:orientation="vertical"
+    android:padding="15dp"
     tools:context=".MusicPlayerActivity">
 
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
+        android:text="返回"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
 
     <androidx.cardview.widget.CardView
+
         android:id="@+id/iv_music"
         android:layout_width="240dp"
         android:layout_height="240dp"
+        android:layout_below="@+id/btn_back"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         app:cardCornerRadius="1000dp"
@@ -27,6 +37,7 @@
             android:layout_width="240dp"
             android:layout_height="240dp"
             android:src="@drawable/wuding" />
+
     </androidx.cardview.widget.CardView>
 
 
@@ -36,14 +47,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_music"
         android:layout_centerHorizontal="true"
+        android:paddingTop="50dp"
         android:text="歌曲名"
+        android:textColor="@color/font"
         android:textSize="20sp" />
 
     <SeekBar
         android:id="@+id/sb_progress"
+        style="@style/CustomSeekBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_songName" />
+        android:layout_below="@+id/tv_songName"
+        android:maxHeight="5dp" />
 
     <RelativeLayout
         android:id="@+id/layout_time"
@@ -57,14 +72,16 @@
             android:id="@+id/tv_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00" />
+            android:text="00:00"
+            android:textColor="@color/font" />
         <!--   展示总时长     -->
         <TextView
             android:id="@+id/tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="00:00" />
+            android:layout_alignParentEnd="true"
+            android:text="00:00"
+            android:textColor="@color/font" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -79,8 +96,8 @@
             android:id="@+id/btn_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/btn_circle"
+            android:layout_marginEnd="15dp"
+            android:background="@color/transparent"
             android:src="@drawable/ic_previous" />
 
         <!--   播放/暂停 按钮     -->
@@ -90,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_toRightOf="@+id/btn_previous"
-            android:background="@drawable/btn_circle"
+            android:background="@color/transparent"
             android:src="@drawable/ic_play" />
 
         <!--   下一首     -->
@@ -99,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/btn_play_pause"
-            android:background="@drawable/btn_circle"
+            android:background="@color/transparent"
             android:src="@drawable/ic_next" />
 
     </RelativeLayout>

@@ -6,7 +6,8 @@
     android:paddingRight="10dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:background="@color/background">
 
     <ImageView
         android:id="@+id/music_icon"
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="歌曲名称"
             android:textSize="15sp"
-            android:textColor="#000000"/>
+            android:textColor="@color/font"/>
 
         <TextView
             android:id="@+id/singer_name"
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:text="作者名"
             android:textSize="12sp"
+            android:textColor="@color/font"
             android:layout_below="@id/music_name"/>
 
         <ImageButton

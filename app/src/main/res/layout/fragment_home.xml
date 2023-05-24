@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     android:paddingTop="5dp">
 
@@ -21,8 +22,8 @@
                 android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/bounder"
                 android:orientation="horizontal">
 
@@ -40,6 +41,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/btn_missing"
+                    android:textColor="@color/font"
                     android:hint="Search" />
             </LinearLayout>
 
@@ -68,11 +70,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:text="我的歌单:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/font"
                         android:textSize="30sp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <HorizontalScrollView
@@ -87,39 +89,39 @@
 
                         <ImageButton
                             android:id="@+id/sing_list_1"
-                            android:clickable="false"
                             android:layout_width="150dp"
                             android:layout_height="150dp"
-                            android:src="@drawable/house_door"
+                            android:background="#00000000"
+                            android:clickable="false"
                             android:scaleType="centerInside"
-                            android:background="#00000000" />
+                            android:src="@drawable/house_door" />
 
                         <ImageButton
                             android:id="@+id/sing_list_2"
-                            android:clickable="false"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleType="centerInside"
                             android:background="#00000000"
-                            android:visibility="invisible"/>
+                            android:clickable="false"
+                            android:scaleType="centerInside"
+                            android:visibility="invisible" />
 
                         <ImageButton
                             android:id="@+id/sing_list_3"
-                            android:clickable="false"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleType="centerInside"
                             android:background="#00000000"
-                            android:visibility="invisible"/>
+                            android:clickable="false"
+                            android:scaleType="centerInside"
+                            android:visibility="invisible" />
 
                         <ImageButton
                             android:id="@+id/sing_list_4"
-                            android:clickable="false"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleType="centerInside"
                             android:background="#00000000"
-                            android:visibility="invisible"/>
+                            android:clickable="false"
+                            android:scaleType="centerInside"
+                            android:visibility="invisible" />
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
@@ -127,8 +129,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="10dp"
+                android:orientation="vertical"
                 tools:ignore="MissingConstraints">
 
                 <LinearLayout
@@ -139,17 +141,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
                         android:text="热门音乐:"
-                        android:textColor="@color/black"
+                        android:textColor="@color/font"
                         android:textSize="30sp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
