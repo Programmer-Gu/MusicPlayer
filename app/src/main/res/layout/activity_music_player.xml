@@ -9,16 +9,16 @@
     tools:context=".MusicPlayerActivity">
 
 
-<!--    <ImageView-->
-<!--        android:id="@+id/iv_music"-->
-<!--        android:layout_width="240dp"-->
-<!--        android:layout_height="240dp"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:layout_marginStart="15dp"-->
-<!--        android:layout_marginTop="15dp"-->
-<!--        android:layout_marginEnd="15dp"-->
-<!--        android:layout_marginBottom="15dp"-->
-<!--        android:src="@drawable/music0" />-->
+        <ImageView
+            android:id="@+id/iv_music"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/wuding" />
 
     <TextView
 
@@ -71,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/btn_circle"
             android:src="@drawable/ic_previous" />
 
         <!--   播放/暂停 按钮     -->
@@ -81,7 +80,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_toRightOf="@+id/btn_previous"
-            android:background="@drawable/btn_circle"
             android:src="@drawable/ic_play" />
 
         <!--   下一首     -->
@@ -90,7 +88,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/btn_play_pause"
-            android:background="@drawable/btn_circle"
             android:src="@drawable/ic_next" />
 
     </RelativeLayout>
