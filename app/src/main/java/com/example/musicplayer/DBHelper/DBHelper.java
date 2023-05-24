@@ -387,7 +387,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return User对象
      */
     public User getUserById(int userId) {
-        String query = "SELECT " + COLUMN_USER_NICKNAME + ", " + COLUMN_USER_EMAIL +
+        String query = "SELECT " + COLUMN_USER_NICKNAME + ", " + COLUMN_USER_EMAIL + ", " + COLUMN_USER_HEAD_PICTURE_PATH +
                 " FROM " + TABLE_USER +
                 " WHERE " + COLUMN_USER_ID + " = ?";
         Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(userId)});
@@ -396,14 +396,17 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             int nicknameColumnIndex = cursor.getColumnIndex(COLUMN_USER_NICKNAME);
             int emailColumnIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
+            int headPicturePathIndex=cursor.getColumnIndex(COLUMN_USER_HEAD_PICTURE_PATH);
 
             if (nicknameColumnIndex != -1 && emailColumnIndex != -1) {
                 String nickname = cursor.getString(nicknameColumnIndex);
                 String email = cursor.getString(emailColumnIndex);
+                int headPicturePath=cursor.getInt(headPicturePathIndex);
                 cursor.close();
                 User user = new User();
                 user.setNickname(nickname);
                 user.setUser_email(email);
+                user.setHeadPicturePath(headPicturePath);
                 return user;
             } else {
                 cursor.close();
@@ -435,9 +438,9 @@ public class DBHelper extends SQLiteOpenHelper {
         int rowsAffected = mWDB.update(TABLE_USER, values, whereClause, whereArgs);
 
         if (rowsAffected == 1) {
-            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户"+userId+"昵称更改成功");
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户" + userId + "昵称更改成功");
         } else {
-            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户昵称更改失败，有"+rowsAffected+"行数据被修改");
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户昵称更改失败，有" + rowsAffected + "行数据被修改");
         }
         return rowsAffected;
     }
@@ -445,7 +448,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * 根据用户ID修改用户头像路径
      *
-     * @param userId          用户ID
+     * @param userId             用户ID
      * @param newHeadPicturePath 用户要修改的头像路径
      * @return 数据库user表中被修改的行数
      */

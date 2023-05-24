@@ -40,7 +40,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private Intent intent;
     private ImageView iv_head;
     private AlertDialog dialog;
-    private int user_id;
 
 
     public PersonalFragment() {
@@ -73,7 +72,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
         //获取sharedPreferences对象
         sharedPreferences = getContext().getSharedPreferences("root", Context.MODE_PRIVATE);
-        user_id = sharedPreferences.getInt("user_id", 0);
+
         //更换头像点击imageview事件
         iv_head = view.findViewById(R.id.iv_head);
         iv_head.setOnClickListener(this);
@@ -83,7 +82,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         if (!login_status) {
             DBHelper.showToast(getContext(), "数据有误，请退出登录后再次登录！");
         } else {
-
+            int user_id = sharedPreferences.getInt("user_id", 0);
             if (user_id == 0) {
                 Log.d("sharedPreferences操作错误", "没有获取到用户的id");
             } else {
@@ -91,7 +90,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 User user = dbHelper.getUserById(user_id);
                 tv_nickname.setText(user.getNickname());
                 tv_email.setText(user.getUser_email());
-
+                iv_head.setImageResource(user.getHeadPicturePath());
             }
         }
 
@@ -224,10 +223,16 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int user_id = sharedPreferences.getInt("user_id", 0);
+                    if (user_id == 0) {
+                        DBHelper.showToast(getContext(), "您的登录已失效，请重新登录~");
+                        dialog.dismiss();
+                        return;
+                    }
                     // 执行设置头像的操作，例如更新数据模型或调用网络请求
                     iv_head.setImageResource(avatarResId);
 
-                    dbHelper.updateHeadPicturePathById(user_id,avatarResId);
+                    dbHelper.updateHeadPicturePathById(user_id, avatarResId);
                     // 显示设置成功的提示
                     Toast.makeText(getContext(), "头像设置成功", Toast.LENGTH_SHORT).show();
 
