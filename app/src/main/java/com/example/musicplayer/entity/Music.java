@@ -14,10 +14,7 @@ public class Music {
 
     private Integer coverPath;//封面路径
 
-
-    public Music() {
-
-    }
+    public Music() {}
 
 
     //--setter and getter

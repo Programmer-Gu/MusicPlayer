@@ -26,7 +26,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     private static SeekBar seekBar;
     private static TextView tv_progress, tv_total, tv_songName;
     private static SeekBar sb_progress;
-    private Intent intent1;
+    private Intent intent;
     private boolean isPlaying = false;
     private MusicService.MusicControl musicControl;
     private ObjectAnimator animator;
@@ -47,7 +47,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_music_player);
 
         //获取从frag1传来的消息（音乐的选择列表）
-        intent1 = getIntent();
+        intent = getIntent();
         init();
     }
 
@@ -65,6 +65,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         btn_play_pause.setOnClickListener(this);
         btn_next.setOnClickListener(this);
         btn_previous.setOnClickListener(this);
+
+
         sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -89,14 +91,23 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         });
         //声明并绑定音乐播放器iv_music控件
         ImageView iv_music = findViewById(R.id.iv_music);
-        String position = intent1.getStringExtra("position");
+        String position = intent.getStringExtra("position");
 
+        //        iv_music.setImageResource(frag1.icons[i]);//这里获取音乐的封面
         int i = Integer.parseInt(position);
-//        iv_music.setImageResource(frag1.icons[i]);//这里获取音乐的封面
         animator = ObjectAnimator.ofFloat(iv_music, "rotation", 0f, 360.0f);
         animator.setDuration(10000);//动画旋转一周的时间为10秒
         animator.setInterpolator(new LinearInterpolator());//匀速
         animator.setRepeatCount(-1);//-1表示设置动画无限循环
+
+        if( musicControl.getMusicState() ){
+            btn_play_pause.setImageResource(R.drawable.ic_play);
+            animator.pause();
+        }
+        else{
+            btn_play_pause.setImageResource(R.drawable.ic_stop);
+            animator.start();
+        }
     }
 
     public static Handler handler = new Handler() {
@@ -127,7 +138,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     };
 
     //用于实现连接服务
-    class MyServiceConn implements ServiceConnection {
+      private class MyServiceConn implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             musicControl = (MusicService.MusicControl) service;
@@ -139,41 +150,28 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void unbind(boolean isUnbind) {
-        //如果解绑了
-        if (isUnbind) {
-            musicControl.pausePlay();
-            unbindService(conn);
-        }
-    }
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_play_pause:
                 // 播放/暂停按钮点击事件
-                if (isPlaying) {
+                if (musicControl.getMusicState()) {
                     //切换图标
                     musicControl.pausePlay();
+                    btn_play_pause.setImageResource(R.drawable.ic_play);
                     animator.pause();
-
                 } else {
                     btn_play_pause.setImageResource(R.drawable.ic_stop);
-
-                    //获取到音乐播放的位置
-                    String position = intent1.getStringExtra("position");
-                    int i = Integer.parseInt(position);
-                    musicControl.play(i);
+                    musicControl.play();
                     animator.start();
                 }
-                //切换播放状态
-                isPlaying = !isPlaying;
                 break;
 
-            // TODO: 2023/5/22 点击播放音乐后，在里面进行上一首下一首的操作
+            // TODO: 2023/5/22 点击播放音乐后，创建播放音乐列表，在里面进行上一首下一首的操作
             case R.id.btn_previous:
+                musicControl.previousMusic();
             case R.id.btn_next:
+                musicControl.nextMusic();
                 break;
         }
     }
@@ -181,6 +179,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbind(isUnbind);
+        if (isUnbind) {
+            musicControl.pausePlay();
+            unbindService(conn);
+        }
     }
 }
