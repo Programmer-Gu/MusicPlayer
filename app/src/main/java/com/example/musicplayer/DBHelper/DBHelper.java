@@ -120,7 +120,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_USER_EMAIL + " TEXT NOT NULL," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_NICKNAME + " TEXT DEFAULT '未命名'," +
-                COLUMN_USER_HEAD_PICTURE_PATH + " TEXT," +
+                COLUMN_USER_HEAD_PICTURE_PATH + " INTEGER DEFAULT 2131165273," +
                 COLUMN_USER_MUSIC_LISTEN_TIME + " INTEGER DEFAULT 0" +
                 ")";
         db.execSQL(createUserTableQuery);
@@ -438,6 +438,33 @@ public class DBHelper extends SQLiteOpenHelper {
             DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户"+userId+"昵称更改成功");
         } else {
             DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户昵称更改失败，有"+rowsAffected+"行数据被修改");
+        }
+        return rowsAffected;
+    }
+
+    /**
+     * 根据用户ID修改用户头像路径
+     *
+     * @param userId          用户ID
+     * @param newHeadPicturePath 用户要修改的头像路径
+     * @return 数据库user表中被修改的行数
+     */
+    public int updateHeadPicturePathById(int userId, int newHeadPicturePath) {
+
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_HEAD_PICTURE_PATH, newHeadPicturePath);
+
+        String whereClause = COLUMN_USER_ID + " = ?";
+        String[] whereArgs = {String.valueOf(userId)};
+
+        int rowsAffected = mWDB.update(TABLE_USER, values, whereClause, whereArgs);
+
+
+        if (rowsAffected == 1) {
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户" + userId + "头像路径更改成功");
+        } else {
+            DBLog.d(DBLog.UPDATE_TAG, TABLE_USER, "用户头像路径更改失败，有" + rowsAffected + "行数据被修改");
         }
         return rowsAffected;
     }

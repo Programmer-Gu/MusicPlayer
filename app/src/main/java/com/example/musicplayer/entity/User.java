@@ -10,7 +10,7 @@ public class User {
     private String user_email;//用户邮箱
     private String password;//密码
     private String nickname;//昵称
-    private String headPicturePath;//头像
+    private Integer headPicturePath;//头像
     private Integer musicListenTime;//听歌时长
     private List<PlayList> ownerMusicList; //用户拥有的歌单
 
@@ -67,11 +67,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    public String getHeadPicturePath() {
+    public int getHeadPicturePath() {
         return headPicturePath;
     }
 
-    public void setHeadPicturePath(String headPicturePath) {
+    public void setHeadPicturePath(Integer headPicturePath) {
         this.headPicturePath = headPicturePath;
     }
 

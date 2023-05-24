@@ -15,6 +15,17 @@
         android:textColor="@color/black"
         android:textSize="40sp" />
 
+    <ImageView
+        android:id="@+id/iv_head"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/bhead1" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -26,7 +37,7 @@
         android:id="@+id/layout_user_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_title">
+        android:layout_below="@+id/iv_head">
 
         <TextView
             android:layout_width="0dp"
