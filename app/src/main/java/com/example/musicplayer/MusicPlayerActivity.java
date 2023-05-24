@@ -49,16 +49,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         intent = getIntent();
         init();
     }
-//    public static Handler handler=new Handler(){
-//        @SuppressLint("HandlerLeak")
-//        @Override
-//        public  void handlerMessage(Message msg){
-//            Bundle bundle=msg.getData();//获取子线程发送过来的音乐播放进度
-//            //获取当前进度currentPosition和总市场duration
-//            int duration=bundle.getInt("duration");
-//            int currentPosition=bundle.getInt("currentPosition");
-//        }
-//    };
+
     private void init() {
         tv_progress = findViewById(R.id.tv_progress);
         tv_total = findViewById(R.id.tv_total);

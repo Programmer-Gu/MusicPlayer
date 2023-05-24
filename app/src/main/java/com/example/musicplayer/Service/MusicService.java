@@ -96,6 +96,7 @@ public class MusicService extends Service {
                 player.reset();
                 player.setAudioSessionId(listIterator.next().getMusicPath());
                 player.start();
+                addTimer();//添加计时器
             }
         }
 
@@ -104,6 +105,7 @@ public class MusicService extends Service {
                 player.reset();
                 player.setAudioSessionId(listIterator.previous().getMusicPath());
                 player.start();
+                addTimer();//添加计时器
             }
         }
 
