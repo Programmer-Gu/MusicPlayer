@@ -57,6 +57,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         btn_play_pause.setOnClickListener(this);
         btn_next.setOnClickListener(this);
         btn_previous.setOnClickListener(this);
+        findViewById(R.id.btn_back).setOnClickListener(this);
 
         sb_progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -87,11 +88,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         animator.setInterpolator(new LinearInterpolator());//匀速
         animator.setRepeatCount(-1);//-1表示设置动画无限循环
 
-        if( musicControl.getMusicState() ){
+        if (musicControl.getMusicState()) {
             btn_play_pause.setImageResource(R.drawable.ic_stop);
             animator.pause();
-        }
-        else{
+        } else {
             btn_play_pause.setImageResource(R.drawable.ic_play);
             animator.start();
         }
@@ -99,7 +99,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
     public static Handler handler = new Handler() {
         //歌曲是多少分钟多少秒钟
-        public String toTime( int duration ){
+        public String toTime(int duration) {
             int minute = duration / 1000 / 60;
             int second = duration / 1000 % 60;
             //对分钟和秒进行字符串处理
@@ -113,6 +113,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             }
             return strMinute + ":" + strSecond;
         }
+
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle = msg.getData();//获取从子线程发送过来的音乐播放进度
@@ -126,7 +127,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             //文本设置
             tv_songName.setText(bundle.getString("songName"));
             //对封面进行设置
-            if( cover != nowCover ){
+            if (cover != nowCover) {
                 songCover.setImageResource(cover);
                 nowCover = cover;
             }
@@ -148,7 +149,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     animator.pause();
                 } else {
                     btn_play_pause.setImageResource(R.drawable.ic_stop);
-                    if( !musicControl.musicIsNull() ){
+                    if (!musicControl.musicIsNull()) {
                         musicControl.continuePlay();
                     }
                     musicControl.play();
@@ -160,6 +161,11 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 musicControl.previousMusic();
             case R.id.btn_next:
                 musicControl.nextMusic();
+                break;
+            case R.id.btn_back:
+                intent = new Intent(MusicPlayerActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
     }

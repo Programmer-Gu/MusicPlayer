@@ -1,0 +1,8 @@
+<!-- custom_seekbar_thumb.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size
+        android:width="10dp"
+        android:height="15dp" />
+    <solid android:color="@color/font" /> <!-- 拖动块颜色 -->
+    <corners android:radius="10dp" />
+</shape>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f8f8f8"
+    android:background="#EEF2E3"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -11,8 +11,11 @@
         android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
         android:padding="8dp"
-        android:text="&lt; 返回" />
+        android:text="&lt; 返回"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -23,7 +26,8 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="用户登录"
-        android:textColor="@color/black"
+
+        android:textColor="@color/font"
         android:textSize="24sp" />
 
 
@@ -35,7 +39,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:background="#ffffff"
+        android:background="#F5FFDA"
         android:hint="邮箱"
         android:padding="16dp"
         android:textColor="@color/black" />
@@ -48,7 +52,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:background="#ffffff"
+        android:background="#F5FFDA"
         android:hint="密码"
         android:inputType="textPassword"
         android:padding="16dp"
@@ -66,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
+            android:textColor="@color/font"
             android:paddingEnd="20dp"
             android:text="还没有账号？快去注册 &gt;&gt;&gt;" />
 
@@ -73,8 +78,10 @@
             android:id="@+id/btn_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="立即注册" />
+            android:background="@drawable/btn_background"
+            android:text="立即注册"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
     </LinearLayout>
 
 
@@ -87,8 +94,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="40dp"
+        android:background="@drawable/btn_background"
         android:text="登录"
-        android:textColor="@color/black" />
+        android:textColor="@color/white"
+        android:textSize="17sp" />
 
     <LinearLayout
         android:id="@+id/layout_privacy"
@@ -102,6 +111,7 @@
             android:id="@+id/ck_privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/font"
             android:text="我同意" />
 
         <TextView

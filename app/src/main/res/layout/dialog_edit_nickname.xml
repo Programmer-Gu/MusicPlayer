@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background">
 
     <EditText
         android:id="@+id/et_new_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="输入新昵称" />
+        android:hint="输入新昵称"
+        android:textColor="@color/font" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,13 +23,20 @@
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="取消" />
+            android:text="取消"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/btn_background"/>
 
         <Button
             android:id="@+id/btn_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="确定" />
+            android:text="确定"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_background" />
 
 
     </LinearLayout>

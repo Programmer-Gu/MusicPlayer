@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,41 +18,43 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="歌单名称"
-                android:textColor="@color/black"
-                android:textSize="25sp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:text="歌单名称"
+                android:textColor="@color/font"
+                android:textSize="25sp" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@color/background"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:padding="10dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/btn_circle"
-                android:src="@drawable/ic_play"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_play" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:textColor="@color/black"
-                android:text="全部播放"
                 android:gravity="center"
-                android:textSize="23sp"/>
+                android:text="全部播放"
+
+                android:textColor="@color/font"
+                android:textSize="23sp" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/song_list"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
 </ScrollView>
