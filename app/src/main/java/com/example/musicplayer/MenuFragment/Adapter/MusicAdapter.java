@@ -52,14 +52,14 @@ public class MusicAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_layout, parent, false);
         }
 
-        // 获取当前位置的书籍信息
+        // 获取当前位置的音乐信息
         Music music = list.get(position);
         // 获取布局文件中的控件对象
         TextView singName = view.findViewById(R.id.music_name);
         TextView singerName = view.findViewById(R.id.singer_name);
         ImageView singIcon = view.findViewById(R.id.music_icon);
 
-        // 设置控件显示的书籍信息
+        // 设置控件显示的音乐信息
         singName.setText(music.getMusicName());
         singerName.setText(music.getSingerName());
         singIcon.setImageResource(music.getCoverPath());
