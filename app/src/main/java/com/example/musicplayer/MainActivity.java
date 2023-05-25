@@ -51,32 +51,34 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
+        //建立数据库对象
+        dbHelper = DBHelper.getInstance(this);
+        //打开数据库读写连接
+        dbHelper.openWriteLink();
+        dbHelper.openReadLink();
+
     }
 
     @Override
-    protected void  onResume() {
+    protected void onResume() {
         super.onResume();
-        if( musicControl == null )return;
-        if( musicControl.getMusicState() ){
+        if (musicControl == null) return;
+        if (musicControl.getMusicState()) {
             musicPlayer.setImageResource(R.drawable.ic_stop);
-        }
-        else{
+        } else {
             musicPlayer.setImageResource(R.drawable.ic_play);
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
-        //建立数据库对象
-        dbHelper = DBHelper.getInstance(this);
-        //打开数据库读写连接
-        dbHelper.openReadLink();
-        dbHelper.openWriteLink();
 
         initViews();//初始化控件
         initEvents();//初始化事件
@@ -123,7 +125,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
         mFragments.add(new HomeFragment(MainActivity.this, playList_data));
-        mFragments.add(new CategoryFragment( MainActivity.this, playList_data ));
+        mFragments.add(new CategoryFragment(MainActivity.this, playList_data));
         mFragments.add(new PersonalFragment());
 
         //初始化适配器
@@ -163,7 +165,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
-    public void initService(){
+    public void initService() {
         conn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -175,16 +177,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Log.d("gzc", "服务连接失败");
             }
         };//创建服务连接对象
-        serviceIntent = new Intent(MainActivity.this,MusicService.class);
-        bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
+        serviceIntent = new Intent(MainActivity.this, MusicService.class);
+        bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-    private void getAllPlayList(){
+    private void getAllPlayList() {
         playList_data = new ArrayList<>();
-        int user_id = sharedPreferences.getInt("user_id", -114514 );
-        if( user_id == -114514 )return;
-        List<Integer>play_list = dbHelper.getPlaylistByUserId(user_id);
-        for( int f : play_list ){
+        int user_id = sharedPreferences.getInt("user_id", -114514);
+        if (user_id == -114514) {
+            return;
+        }
+        List<Integer> play_list = dbHelper.getPlaylistByUserId(user_id);
+        for (int f : play_list) {
             playList_data.add(dbHelper.findMusicListById(f));
         }
     }
@@ -204,20 +208,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 selectTab(2);
                 break;
             case R.id.button_player:
-                if( musicControl.getMusicState() ){
+                if (musicControl.getMusicState()) {
                     musicPlayer.setImageResource(R.drawable.ic_play);
                     musicControl.pausePlay();
-                }
-                else{
+                } else {
                     musicPlayer.setImageResource(R.drawable.ic_stop);
-                    if( !musicControl.musicIsNull() ){
+                    if (!musicControl.musicIsNull()) {
                         musicControl.continuePlay();
                     }
                     musicControl.play();
                 }
                 break;
             case R.id.music_image:
-                Intent intent = new Intent( MainActivity.this, MusicPlayerActivity.class );
+                Intent intent = new Intent(MainActivity.this, MusicPlayerActivity.class);
                 startActivity(intent);
                 break;
         }

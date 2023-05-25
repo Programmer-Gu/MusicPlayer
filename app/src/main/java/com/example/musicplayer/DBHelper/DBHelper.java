@@ -261,17 +261,30 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param owner
      * @return
      */
-    public long insertPlaylist(String listName, String listPicturePath, long owner) {
+    public long insertPlaylist(String listName, Integer listPicturePath, long owner) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PLAYLIST_LIST_NAME, listName);
         values.put(COLUMN_PLAYLIST_LIST_PICTURE_PATH, listPicturePath);
         values.put(COLUMN_PLAYLIST_OWNER, owner);
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_PLAYLIST, null, values);
+
+        // 获取自增ID
+        long insertedId = -1;
+        if (result != -1) {
+            String query = "SELECT last_insert_rowid()";
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                insertedId = cursor.getLong(0);
+            }
+            cursor.close();
+        }
+
         db.close();
-        //打印日志
-        DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST, "插入" + result + "行");
-        return result;
+        // 打印日志
+        DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST, "插入" + result + "行，自增ID为" + insertedId);
+
+        return insertedId;
     }
 
     /**
@@ -441,6 +454,42 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * 根据歌曲路径查询歌曲id
+     *
+     * @param musicPath 用户id
+     * @return Integer 歌曲id
+     */
+    public Integer getMusicIdByPath(int musicPath) {
+        String query = "SELECT " + COLUMN_MUSIC_ID +
+                " FROM " + TABLE_MUSIC +
+                " WHERE " + COLUMN_MUSIC_PATH + " = ?";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(musicPath)});
+
+        //处理查询结果
+        if (cursor.moveToFirst()) {
+
+            int musicPathIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
+
+            if (musicPathIndex != -1 ) {
+
+                int musicId = cursor.getInt(musicPathIndex);
+
+                return musicId;
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "列索引无效");
+                return null; // 列索引无效
+            }
+        } else {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "歌曲不存在");
+            return null; // 歌曲不存在
+        }
+    }
+
+
+
 
     /**
      *  根据用户id查询其歌单id
@@ -518,7 +567,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 根据用户id修改用户昵称
-     *
      * @param userId      用户id
      * @param newNickname 用户要修改的昵称
      * @return 数据库user表中被修改的行数
@@ -549,7 +597,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return 数据库user表中被修改的行数
      */
     public int updateHeadPicturePathById(int userId, int newHeadPicturePath) {
-
+        SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_HEAD_PICTURE_PATH, newHeadPicturePath);
@@ -557,7 +605,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String whereClause = COLUMN_USER_ID + " = ?";
         String[] whereArgs = {String.valueOf(userId)};
 
-        int rowsAffected = mWDB.update(TABLE_USER, values, whereClause, whereArgs);
+        int rowsAffected = db.update(TABLE_USER, values, whereClause, whereArgs);
 
 
         if (rowsAffected == 1) {
@@ -667,6 +715,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+
+
 
 
     /**
