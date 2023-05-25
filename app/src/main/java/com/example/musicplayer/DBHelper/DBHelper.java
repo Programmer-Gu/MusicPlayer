@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.musicplayer.LogHelper.DBLog;
+import com.example.musicplayer.R;
 import com.example.musicplayer.entity.Music;
 import com.example.musicplayer.entity.PlayList;
 import com.example.musicplayer.entity.User;
@@ -150,12 +151,28 @@ public class DBHelper extends SQLiteOpenHelper {
                     COLUMN_MUSIC_PATH + " TEXT)";
             db.execSQL(createMusicTableQuery);
             // 插入数据
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_MUSIC_NAME, "Song 1");
-            values.put(COLUMN_MUSIC_SINGER_NAME, "Singer 1");
-            values.put(COLUMN_MUSIC_COVER_PATH, 123);
-            values.put(COLUMN_MUSIC_PATH, 123);
-            db.insert(TABLE_MUSIC, null, values);
+
+            Music temp_music0 = new Music("稻香", "周杰伦", R.raw.daoxiang, R.drawable.daoxiang);
+            Music temp_music1 = new Music("大约在冬季", "齐秦", R.raw.dayuezaidongji, R.drawable.dayuezaidongji);
+            Music temp_music2 = new Music("玫瑰花的葬礼", "许嵩", R.raw.meiguihuadezangli, R.drawable.meiguihuadezangli);
+            Music temp_music3 = new Music("平凡之路", "朴树", R.raw.pingfanzhilu, R.drawable.pingfanzhilu);
+            Music temp_music4 = new Music("起风了", "买辣椒也用券", R.raw.qifengle, R.drawable.qifengle);
+            Music temp_music5 = new Music("青花瓷", "周杰伦", R.raw.qinghuaci, R.drawable.qinghuaci);
+            Music temp_music6 = new Music("认真的雪", "薛之谦", R.raw.renzhendexue, R.drawable.renzhendexue);
+            Music temp_music7 = new Music("素颜", "许嵩", R.raw.suyan, R.drawable.suyan);
+            Music temp_music8 = new Music("有何不可", "许嵩", R.raw.youhebuke, R.drawable.youhebuke);
+            Music temp_music9 = new Music("屋顶", "周杰伦", R.raw.wuding, R.drawable.wuding);
+            insertMusic(temp_music0);
+            insertMusic(temp_music1);
+            insertMusic(temp_music2);
+            insertMusic(temp_music3);
+            insertMusic(temp_music4);
+            insertMusic(temp_music5);
+            insertMusic(temp_music6);
+            insertMusic(temp_music7);
+            insertMusic(temp_music8);
+            insertMusic(temp_music9);
+
 
             // 插入更多数据...
         }
@@ -424,6 +441,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    /**
+     * 根据用户id查询其歌单id
+     *
+     * @param userId 用户id
+     * @return List<Integer> 存放用户的歌单id
+     */
+    public List<Integer> getPlaylistByUserId(int userId) {
+        String query = "SELECT " + COLUMN_PLAYLIST_ID +
+                " FROM " + TABLE_USER_PLAYLIST +
+                " WHERE " + COLUMN_USER_ID + " = ?";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        List<Integer> list = new ArrayList<>();
+        //处理查询结果
+        while (cursor.moveToNext()) {
+            int playlistIdColumnIndex = cursor.getColumnIndex(COLUMN_PLAYLIST_ID);
+
+            if (playlistIdColumnIndex != -1) {
+                int playlistId = cursor.getInt(playlistIdColumnIndex);
+                list.add(playlistId);
+
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "列索引无效");
+                return null; // 列索引无效
+            }
+        }
+        return list;
+    }
+
+
     /**
      * 根据歌曲id查询歌曲对象
      *
@@ -493,6 +542,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
+
     /**
      * 根据用户ID修改用户头像路径
      *
@@ -524,7 +574,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * 根据歌单id构造歌单对象
      *
      * @param playlistId 歌曲列表id
-     * @return 数据库user表中被修改的行数
+     * @return PlayList对象
      */
     public PlayList findMusicListById(int playlistId) {
 
@@ -587,6 +637,35 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return playList;
+    }
+
+    /**
+     * 根据歌名进行模糊查询
+     * @param name 歌名
+     * @return 所有符合查询的歌曲列表
+     */
+    public List<Music> searchMusicByName(String name) {
+        List<Music> list = new ArrayList<>();
+        String query = "SELECT " + COLUMN_MUSIC_ID +
+                " FROM " + TABLE_MUSIC +
+                " WHERE " + COLUMN_MUSIC_NAME + "LIKE %" + name + "%;";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(name)});
+
+        while (cursor.moveToNext()) {
+
+            int musicIdColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
+
+            if (musicIdColumnIndex != -1) {
+                int musicId = cursor.getInt(musicIdColumnIndex);
+                Music tmp_music = dbHelper.getMusicById(musicId);
+                list.add(tmp_music);
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_PLAYLIST_SONG, "列索引无效");
+                return null; // 列索引无效
+            }
+        }
+        return list;
     }
 
 

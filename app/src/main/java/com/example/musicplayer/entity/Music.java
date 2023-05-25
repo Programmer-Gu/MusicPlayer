@@ -14,7 +14,15 @@ public class Music {
 
     private Integer coverPath;//封面路径
 
-    public Music() {}
+    public Music() {
+    }
+
+    public Music(String musicName, String singerName, Integer musicPath, Integer coverPath) {
+        this.musicName = musicName;
+        this.singerName = singerName;
+        this.musicPath = musicPath;
+        this.coverPath = coverPath;
+    }
 
 
     //--setter and getter
