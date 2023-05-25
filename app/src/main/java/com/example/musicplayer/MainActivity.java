@@ -47,14 +47,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Intent serviceIntent;
     private boolean isUnbind;
     private List<PlayList> playList_data;
+    private List<Integer> play_list;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void  onResume() {
+    protected void onResume() {
         super.onResume();
         if( musicControl == null )return;
         if( musicControl.getMusicState() ){
@@ -63,6 +59,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         else{
             musicPlayer.setImageResource(R.drawable.ic_play);
         }
+        getAllPlayList();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -73,7 +75,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
         //建立数据库对象
-        dbHelper = DBHelper.getInstance(this);
+        dbHelper = new DBHelper(MainActivity.this);
         //打开数据库读写连接
         dbHelper.openReadLink();
         dbHelper.openWriteLink();
@@ -122,8 +124,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
-        mFragments.add(new HomeFragment(MainActivity.this, playList_data));
-        mFragments.add(new CategoryFragment( MainActivity.this, playList_data ));
+        mFragments.add(new HomeFragment(MainActivity.this, dbHelper, playList_data, play_list));
+        mFragments.add(new CategoryFragment( MainActivity.this, playList_data, play_list, this ));
         mFragments.add(new PersonalFragment());
 
         //初始化适配器
@@ -179,11 +181,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-    private void getAllPlayList(){
+    public void getAllPlayList(){
         playList_data = new ArrayList<>();
         int user_id = sharedPreferences.getInt("user_id", -114514 );
         if( user_id == -114514 )return;
-        List<Integer>play_list = dbHelper.getPlaylistByUserId(user_id);
+        play_list = dbHelper.getPlaylistByUserId(user_id);
         for( int f : play_list ){
             playList_data.add(dbHelper.findMusicListById(f));
         }

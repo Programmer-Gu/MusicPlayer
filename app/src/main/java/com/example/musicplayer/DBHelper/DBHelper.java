@@ -441,6 +441,39 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * 根据歌曲路径查询歌曲id
+     *
+     * @param musicPath 用户id
+     * @return Integer 歌曲id
+     */
+    public Integer getMusicIdByPath(int musicPath) {
+        String query = "SELECT " + COLUMN_MUSIC_ID +
+                " FROM " + TABLE_MUSIC +
+                " WHERE " + COLUMN_MUSIC_PATH + " = ?";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(musicPath)});
+
+        //处理查询结果
+        if (cursor.moveToFirst()) {
+
+            int musicPathIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
+
+            if (musicPathIndex != -1 ) {
+
+                int musicId = cursor.getInt(musicPathIndex);
+
+                return musicId;
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "列索引无效");
+                return null; // 列索引无效
+            }
+        } else {
+            cursor.close();
+            DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "歌曲不存在");
+            return null; // 歌曲不存在
+        }
+    }
 
     /**
      *  根据用户id查询其歌单id
@@ -619,9 +652,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //处理查询结果
         while (cursor.moveToNext()) {
-
             int musicIdColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
-
 
             if (musicIdColumnIndex != -1) {
                 int musicId = cursor.getInt(musicIdColumnIndex);

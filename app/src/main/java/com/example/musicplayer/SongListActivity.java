@@ -35,7 +35,7 @@ public class SongListActivity  extends AppCompatActivity {
 
         // 初始化列表，绑定控件元素
         mySongList = new ArrayList<Music>();
-        musicAdapter = new MusicAdapter(SongListActivity.this, mySongList);
+        musicAdapter = new MusicAdapter(SongListActivity.this, mySongList, null, null, null);
 
         playListName = findViewById(R.id.song_list_name);
         relativeLayout = findViewById(R.id.song_list_background);
@@ -54,22 +54,6 @@ public class SongListActivity  extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        for( int i = 0; i < mySongList.size(); i++ ){
-            View itemView = listView.getChildAt(i);
-            Button nextButton = itemView.findViewById(R.id.to_play);
-            int finalI = i;
-            nextButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MusicService.MusicControl musicControl = MainActivity.musicControl;
-                    musicControl.addNextMusic(mySongList.get(finalI));
-                    Toast.makeText(SongListActivity.this, "已添加至下一首播放", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-        }
     }
 
     public void initSongList(){

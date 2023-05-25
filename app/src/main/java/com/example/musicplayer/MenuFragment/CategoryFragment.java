@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.MenuFragment.Adapter.MusicListAdapter;
 import com.example.musicplayer.R;
 import com.example.musicplayer.SongListActivity;
@@ -25,10 +27,14 @@ public class CategoryFragment extends Fragment {
     private ListView listView;
     private MusicListAdapter musicListAdapter;
     private Context context;
-    public CategoryFragment( Context context, List<PlayList> playList_data ) {
+    private List<Integer> play_list;
+    private MainActivity aMain;
+    public CategoryFragment(Context context, List<PlayList> playList_data, List<Integer> play_list, MainActivity aMain) {
         // Required empty public constructor
         this.playList_data = playList_data;
         this.context = context;
+        this.play_list = play_list;
+        this.aMain = aMain;
     }
 
     @SuppressLint("MissingInflatedId")
@@ -61,5 +67,4 @@ public class CategoryFragment extends Fragment {
         });
         return view;
     }
-
 }
