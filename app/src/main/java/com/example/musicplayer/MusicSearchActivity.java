@@ -58,7 +58,7 @@ public class MusicSearchActivity extends AppCompatActivity {
             playList_data.add(dbHelper.findMusicListById(f));
         }
 
-        allMusic=dbHelper.getAllMusic();
+        allMusic = dbHelper.getAllMusic();
         musicAdapter = new MusicAdapter(MusicSearchActivity.this,allMusic,playList_data,play_list,dbHelper);
         listView.setAdapter(musicAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -156,7 +156,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
         mFragments.add(new HomeFragment(MainActivity.this, dbHelper, playList_data, play_list));
-        mFragments.add(new CategoryFragment( MainActivity.this, playList_data, play_list, this ));
+        mFragments.add(new CategoryFragment( MainActivity.this, playList_data, play_list));
         mFragments.add(new PersonalFragment());
 
         //初始化适配器
@@ -212,7 +212,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-    private void getAllPlayList() {
+    public void getAllPlayList() {
         playList_data = new ArrayList<>();
         int user_id = sharedPreferences.getInt("user_id", -114514);
         if (user_id == -114514) {

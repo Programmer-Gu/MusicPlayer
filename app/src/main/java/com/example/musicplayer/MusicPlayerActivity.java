@@ -48,9 +48,11 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         if( musicControl == null )return;
         if( musicControl.getMusicState() ){
             btn_play_pause.setImageResource(R.drawable.ic_stop);
+            animator.start();
         }
         else{
             btn_play_pause.setImageResource(R.drawable.ic_play);
+            animator.pause();
         }
     }
 
