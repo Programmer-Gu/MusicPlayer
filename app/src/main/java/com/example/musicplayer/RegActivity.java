@@ -80,6 +80,7 @@ public class RegActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 intent = new Intent(RegActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.btn_back:
                 //返回按钮点击事件

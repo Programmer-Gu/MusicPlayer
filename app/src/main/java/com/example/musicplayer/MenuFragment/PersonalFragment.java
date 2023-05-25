@@ -40,6 +40,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private Intent intent;
     private ImageView iv_head;
     private AlertDialog dialog;
+    private EditText etNewNickname;
+    private Button btnConfirm;
 
 
     public PersonalFragment() {
@@ -158,8 +160,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         View dialogView = inflater.inflate(R.layout.dialog_edit_nickname, null);
         dialogBuilder.setView(dialogView);
 
-        EditText etNewNickname = dialogView.findViewById(R.id.et_new_nickname);
-        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
+        etNewNickname = dialogView.findViewById(R.id.et_new_nickname);
+        btnConfirm = dialogView.findViewById(R.id.btn_confirm);
         Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
 
 

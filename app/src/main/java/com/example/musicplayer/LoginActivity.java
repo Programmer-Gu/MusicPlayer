@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this, "请输入完整信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!agree){
+                if (!agree) {
                     Toast.makeText(this, "请勾选用户隐私协议", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
-
+                finish();
 
                 break;
             case R.id.btn_register:

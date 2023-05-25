@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.CategoryFragment;
@@ -48,10 +47,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Intent serviceIntent;
     private boolean isUnbind;
     private List<PlayList> playList_data;
-    private List<Integer> play_list;
 
     @Override
-    protected void onResume() {
+    protected void onStart() {
+        super.onStart();
+        //建立数据库对象
+        dbHelper = DBHelper.getInstance(this);
+        //打开数据库读写连接
+        dbHelper.openWriteLink();
+        dbHelper.openReadLink();
+        // 检查音乐表是否存在
+        Music music = dbHelper.getMusicById(1);
+        //如果存在，不插入数据
+        if (music == null) {
+            Music temp_music0 = new Music("稻香", "周杰伦", R.raw.daoxiang, R.drawable.daoxiang);
+            Music temp_music1 = new Music("大约在冬季", "齐秦", R.raw.dayuezaidongji, R.drawable.dayuezaidongji);
+            Music temp_music2 = new Music("玫瑰花的葬礼", "许嵩", R.raw.meiguihuadezangli, R.drawable.meiguihuadezangli);
+            Music temp_music3 = new Music("平凡之路", "朴树", R.raw.pingfanzhilu, R.drawable.pingfanzhilu);
+            Music temp_music4 = new Music("起风了", "买辣椒也用券", R.raw.qifengle, R.drawable.qifengle);
+            Music temp_music5 = new Music("青花瓷", "周杰伦", R.raw.qinghuaci, R.drawable.qinghuaci);
+            Music temp_music6 = new Music("认真的雪", "薛之谦", R.raw.renzhendexue, R.drawable.renzhendexue);
+            Music temp_music7 = new Music("素颜", "许嵩", R.raw.suyan, R.drawable.suyan);
+            Music temp_music8 = new Music("有何不可", "许嵩", R.raw.youhebuke, R.drawable.youhebuke);
+            Music temp_music9 = new Music("屋顶", "周杰伦", R.raw.wuding, R.drawable.wuding);
+            dbHelper.insertMusic(temp_music0);
+            dbHelper.insertMusic(temp_music1);
+            dbHelper.insertMusic(temp_music2);
+            dbHelper.insertMusic(temp_music3);
+            dbHelper.insertMusic(temp_music4);
+            dbHelper.insertMusic(temp_music5);
+            dbHelper.insertMusic(temp_music6);
+            dbHelper.insertMusic(temp_music7);
+            dbHelper.insertMusic(temp_music8);
+            dbHelper.insertMusic(temp_music9);
+        }
+
+    }
+
+    @Override
+    protected void  onResume() {
         super.onResume();
         if( musicControl == null )return;
         if( musicControl.getMusicState() ){
@@ -60,24 +94,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         else{
             musicPlayer.setImageResource(R.drawable.ic_play);
         }
-        getAllPlayList();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("gzc", String.format("%d",R.drawable.daoxiang));
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
         //建立数据库对象
-        dbHelper = DBHelper.getInstance(MainActivity.this);
+        dbHelper = DBHelper.getInstance(this);
         //打开数据库读写连接
         dbHelper.openReadLink();
         dbHelper.openWriteLink();
@@ -183,11 +210,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-    public void getAllPlayList(){
+    private void getAllPlayList(){
         playList_data = new ArrayList<>();
         int user_id = sharedPreferences.getInt("user_id", -114514 );
         if( user_id == -114514 )return;
-        play_list = dbHelper.getPlaylistByUserId(user_id);
+        List<Integer>play_list = dbHelper.getPlaylistByUserId(user_id);
         for( int f : play_list ){
             playList_data.add(dbHelper.findMusicListById(f));
         }
