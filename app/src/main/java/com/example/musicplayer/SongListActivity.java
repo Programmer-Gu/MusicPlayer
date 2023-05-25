@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ public class SongListActivity  extends AppCompatActivity {
     private MusicAdapter musicAdapter;
     private List<Music> mySongList;
     private RelativeLayout relativeLayout;
-    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +41,13 @@ public class SongListActivity  extends AppCompatActivity {
         // 初始化列表，绑定控件元素
         mySongList = new ArrayList<Music>();
         musicAdapter = new MusicAdapter(SongListActivity.this, mySongList);
-        dbHelper = DBHelper.getInstance(this);
 
         playListName = findViewById(R.id.song_list_name);
         relativeLayout = findViewById(R.id.song_list_background);
         listView = findViewById(R.id.song_list);
         listView.setAdapter(musicAdapter);
 
-        initSongList( getIntent().getIntExtra("platListId", 0) );
+        initSongList();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -59,14 +58,16 @@ public class SongListActivity  extends AppCompatActivity {
         });
     }
 
-    public void initSongList( int playListId ){
-        PlayList playList = dbHelper.findMusicListById(playListId);
+    public void initSongList(){
+        Intent intent = getIntent();
+        List<Music> musicList = (List<Music>) intent.getSerializableExtra("musicList");
         mySongList.clear();
-        for( Music f : playList.getMusicList() ){
+        if( musicList == null )return;
+        for( Music f : musicList ){
             mySongList.add(f);
         }
-        relativeLayout.setBackgroundResource(playList.getListPicturePath());
-        playListName.setText(playList.getListName());
+        relativeLayout.setBackgroundResource(intent.getIntExtra("cover",0));
+        playListName.setText(intent.getIntExtra("ListName",0));
     }
 
 }

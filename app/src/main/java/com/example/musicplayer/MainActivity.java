@@ -23,6 +23,7 @@ import com.example.musicplayer.MenuFragment.CategoryFragment;
 import com.example.musicplayer.MenuFragment.HomeFragment;
 import com.example.musicplayer.MenuFragment.PersonalFragment;
 import com.example.musicplayer.Service.MusicService;
+import com.example.musicplayer.entity.PlayList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private ServiceConnection conn;
     private Intent serviceIntent;
     private boolean isUnbind;
+    private List<PlayList> playList_data;
 
     @Override
     protected void onStart() {
@@ -73,12 +75,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
+
         initViews();//初始化控件
         initEvents();//初始化事件
         initDatas();//初始化数据
         initService();//初始化服务
+        getAllPlayList();//获取用户歌单信息
 
-        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
         //查询登录状态，如果没有登录，跳转到登录界面
         boolean login_status = sharedPreferences.getBoolean("login_status", false);
         if (!login_status) {
@@ -117,8 +121,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         mFragments = new ArrayList<>();
         //将四个Fragment加入集合中
-        mFragments.add(new HomeFragment(MainActivity.this));
-        mFragments.add(new CategoryFragment());
+        mFragments.add(new HomeFragment(MainActivity.this, playList_data));
+        mFragments.add(new CategoryFragment( MainActivity.this, playList_data ));
         mFragments.add(new PersonalFragment());
 
         //初始化适配器
@@ -172,6 +176,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         };//创建服务连接对象
         serviceIntent = new Intent(MainActivity.this,MusicService.class);
         bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
+    }
+
+    private void getAllPlayList(){
+        playList_data = new ArrayList<>();
+        int user_id = sharedPreferences.getInt("user_id", -114514 );
+        if( user_id == -114514 )return;
+        List<Integer>play_list = dbHelper.getPlaylistByUserId(user_id);
+        for( int f : play_list ){
+            playList_data.add(dbHelper.findMusicListById(f));
+        }
     }
 
     //处理Tab的点击事件
