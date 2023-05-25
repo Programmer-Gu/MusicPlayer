@@ -3,40 +3,27 @@ package com.example.musicplayer.MenuFragment;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.musicplayer.DBHelper.DBHelper;
-import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.MenuFragment.Adapter.DataBean;
 import com.example.musicplayer.MenuFragment.Adapter.ImageAdapter;
 import com.example.musicplayer.MenuFragment.Adapter.MusicAdapter;
-import com.example.musicplayer.MenuFragment.Adapter.MusicListAdapter;
 import com.example.musicplayer.MusicSearchActivity;
 import com.example.musicplayer.R;
-import com.example.musicplayer.Service.MusicService;
 import com.example.musicplayer.SongListActivity;
 import com.example.musicplayer.entity.Music;
 import com.example.musicplayer.entity.PlayList;
@@ -55,6 +42,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private List<Music> hotMusic;
     private List<Integer> play_list;
     private DBHelper dbHelper;
+    private List<LinearLayout> listVis;
+    private List<TextView> listTitle;
+    private List<ImageView> listImage;
 
     public HomeFragment(Context context, DBHelper dbHelper, List<PlayList> playList_data, List<Integer> play_list) {
         this.playList_data = playList_data;
@@ -71,6 +61,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        initList( view );
+        int i = 0;
+        for( i = 0; i <  playList_data.size(); i++ ){
+            if( i >= 3 ) break;
+            listTitle.get(i).setText(playList_data.get(i).getListName());
+            listImage.get(i).setImageResource(playList_data.get(i).getListPicturePath());
+            int finalI = i;
+            listVis.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), SongListActivity.class);
+                    if (playList_data.size() > finalI) {
+                        intent.putExtra("listId", play_list.get(finalI));
+                    }
+                    startActivity(intent);
+                }
+            });
+            listVis.get(i).setVisibility(View.VISIBLE);
+        }
+        listVis.get(i).setVisibility(View.VISIBLE);
+        listTitle.get(i).setText("跟多歌单");
 
         view.findViewById(R.id.sing_list_1).setOnClickListener(this);
         view.findViewById(R.id.jump_to_search).setOnClickListener(this);
@@ -96,6 +108,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
+    public void initList( View view ){
+        listVis = new ArrayList<>();
+        listTitle = new ArrayList<>();
+        listImage = new ArrayList<>();
+
+        listVis.add(view.findViewById(R.id.list_1));
+        listVis.add(view.findViewById(R.id.list_2));
+        listVis.add(view.findViewById(R.id.list_3));
+        listVis.add(view.findViewById(R.id.list_4));
+
+        listTitle.add(view.findViewById(R.id.sing_list_name_1));
+        listTitle.add(view.findViewById(R.id.sing_list_name_2));
+        listTitle.add(view.findViewById(R.id.sing_list_name_3));
+        listTitle.add(view.findViewById(R.id.sing_list_name_4));
+
+        listImage.add(view.findViewById(R.id.sing_list_1));
+        listImage.add(view.findViewById(R.id.sing_list_2));
+        listImage.add(view.findViewById(R.id.sing_list_3));
+        listImage.add(view.findViewById(R.id.sing_list_4));
+    }
 
 
     @Override

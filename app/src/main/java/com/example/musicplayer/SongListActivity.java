@@ -32,6 +32,11 @@ public class SongListActivity extends AppCompatActivity {
     private DBHelper dbHelper;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         super.onCreate(savedInstanceState);
@@ -81,8 +86,6 @@ public class SongListActivity extends AppCompatActivity {
     public void initSongList() {
         Intent intent = getIntent();
         int list_id = intent.getIntExtra("listId", 0);
-
-
 
         PlayList playList = dbHelper.findMusicListById(list_id);
         List<Music> musicList = playList.getMusicList();

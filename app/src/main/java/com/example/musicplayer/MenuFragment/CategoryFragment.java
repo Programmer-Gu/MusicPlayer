@@ -195,9 +195,11 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     }
 
     public void refreshData(int user_id){
-        List<Integer> play_list = dbHelper.getPlaylistByUserId(user_id);
+        List<Integer> myPlay_list = dbHelper.getPlaylistByUserId(user_id);
         playList_data.clear();
-        for (int f : play_list) {
+        play_list.clear();
+        for (int f : myPlay_list) {
+            play_list.add(f);
             playList_data.add(dbHelper.findMusicListById(f));
         }
         musicListAdapter.notifyDataSetChanged();

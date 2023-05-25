@@ -34,37 +34,6 @@ public class MusicService extends Service {
      */
     public MusicService() {
         musicList = new LinkedList<>();
-
-        Music music1 = new Music();
-        music1.setMusicName("起风了");
-        music1.setMusicPath(R.raw.qifengle);
-        music1.setCoverPath(R.drawable.btn_circle);
-        music1.setSingerName("卖辣椒也用券");
-        musicList.add(music1);
-        Music music2 = new Music();
-        music2.setMusicName("屋顶");
-        music2.setMusicPath(R.raw.wuding);
-        music2.setCoverPath(R.drawable.heart_red);
-        music2.setSingerName("null");
-        musicList.add(music2);
-        Music music3 = new Music();
-        music3.setMusicName("起风了");
-        music3.setMusicPath(R.raw.qifengle);
-        music3.setCoverPath(R.drawable.btn_circle);
-        music3.setSingerName("卖辣椒也用券");
-        musicList.add(music3);
-        Music music4 = new Music();
-        music4.setMusicName("屋顶");
-        music4.setMusicPath(R.raw.wuding);
-        music4.setCoverPath(R.drawable.heart_red);
-        music4.setSingerName("null");
-        musicList.add(music4);
-        Music music5 = new Music();
-        music5.setMusicName("起风了");
-        music5.setMusicPath(R.raw.qifengle);
-        music5.setCoverPath(R.drawable.btn_circle);
-        music5.setSingerName("卖辣椒也用券");
-        musicList.add(music5);
         listIterator = musicList.listIterator();
     }
 
@@ -167,9 +136,6 @@ public class MusicService extends Service {
                 if( player != null ){
                     player.reset();
                 }
-                if( !listIterator.hasPrevious() ){
-                    listIterator.next();
-                }
                 nowMusic = listIterator.next();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
@@ -187,9 +153,6 @@ public class MusicService extends Service {
                 if( player != null ){
                     player.reset();
                 }
-                if( !listIterator.hasNext() ){
-                    listIterator.previous();
-                }
                 nowMusic = listIterator.previous();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
@@ -198,7 +161,11 @@ public class MusicService extends Service {
         }
 
         public void addNextMusic( Music music ){
+           if( listIterator.hasNext() ){
+               listIterator.next();
+           }
            listIterator.add(music);
+           listIterator.previous();
         }
 
         public boolean getMusicState(){

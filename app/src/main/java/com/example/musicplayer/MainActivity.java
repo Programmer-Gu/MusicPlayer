@@ -20,6 +20,8 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.musicplayer.DBHelper.DBHelper;
@@ -47,7 +49,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //声明三个Tab的ImageButton
     private ImageButton mImg1, mImg2, mImg3, musicPlayer;
     private ImageView musicImage;
-    private LinearLayout toStartMusic;
+    private RelativeLayout toStartMusic;
     private DBHelper dbHelper;
     private SharedPreferences sharedPreferences;
     private ServiceConnection conn;
@@ -56,6 +58,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private List<PlayList> playList_data;
     private List<Integer> play_list;
     private Music nowMusic;
+    private TextView nowSongName;
 
     @Override
     protected void onStart() {
@@ -99,6 +102,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 musicImage.setImageResource(R.drawable.icon);
             }
             musicImage.setImageResource(nowMusic.getCoverPath());
+            nowSongName.setText(nowMusic.getMusicName());
         }
         else{
             musicPlayer.setImageResource(R.drawable.ic_play);
@@ -161,8 +165,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         toStartMusic = findViewById(R.id.music_image);
         musicPlayer = findViewById(R.id.button_player);
-        musicImage.findViewById(R.id.music_cover_show);
-
+        musicImage = findViewById(R.id.music_cover_show);
+        nowSongName = findViewById(R.id.nowSongName);
     }
 
     private void initDatas() {
