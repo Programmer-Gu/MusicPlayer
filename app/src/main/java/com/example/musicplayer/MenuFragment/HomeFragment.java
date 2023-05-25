@@ -55,6 +55,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         insertElement();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshList();
+    }
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,28 +69,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initList( view );
-        int i = 0;
-        for( i = 0; i <  playList_data.size(); i++ ){
-            if( i >= 3 ) break;
-            listTitle.get(i).setText(playList_data.get(i).getListName());
-            listImage.get(i).setImageResource(playList_data.get(i).getListPicturePath());
-            int finalI = i;
-            listVis.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getContext(), SongListActivity.class);
-                    if (playList_data.size() > finalI) {
-                        intent.putExtra("listId", play_list.get(finalI));
-                    }
-                    startActivity(intent);
-                }
-            });
-            listVis.get(i).setVisibility(View.VISIBLE);
-        }
-        listVis.get(i).setVisibility(View.VISIBLE);
-        listTitle.get(i).setText("跟多歌单");
+        refreshList();
 
-        view.findViewById(R.id.sing_list_1).setOnClickListener(this);
         view.findViewById(R.id.jump_to_search).setOnClickListener(this);
 
         banner = view.findViewById(R.id.banner);
@@ -133,21 +119,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.sing_list_1:
-                //设置当前点击的Tab所对应的页面
-                Intent intent = new Intent( context, SongListActivity.class );
-                if( playList_data == null )return;
-                if( playList_data.size() > 0 ){
-                    PlayList playList = playList_data.get(0);
-                    intent.putExtra("musicList", new ArrayList<>(playList.getMusicList()));
-                    intent.putExtra("cover", playList.getListPicturePath());
-                    intent.putExtra("ListName", playList.getListName());
-                }
-                startActivity(intent);
+//            case R.id.sing_list_1:
+//                //设置当前点击的Tab所对应的页面
+//                Intent intent = new Intent( context, SongListActivity.class );
+//                if( playList_data == null )return;
+//                if( playList_data.size() > 0 ){
+//                    PlayList playList = playList_data.get(0);
+//                    intent.putExtra("musicList", new ArrayList<>(playList.getMusicList()));
+//                    intent.putExtra("cover", playList.getListPicturePath());
+//                    intent.putExtra("ListName", playList.getListName());
+//                }
+//                startActivity(intent);
             case R.id.jump_to_search:
                 Intent myIntent = new Intent(context, MusicSearchActivity.class);
                 startActivity(myIntent);
         }
+    }
+
+    public void refreshList(){
+        int i = 0;
+        for( i = 0; i <  playList_data.size(); i++ ){
+            if( i >= 3 ) break;
+            listTitle.get(i).setText(playList_data.get(i).getListName());
+            listImage.get(i).setImageResource(playList_data.get(i).getListPicturePath());
+            int finalI = i;
+            listVis.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), SongListActivity.class);
+                    if (playList_data.size() > finalI) {
+                        intent.putExtra("listId", play_list.get(finalI));
+                    }
+                    startActivity(intent);
+                }
+            });
+            listVis.get(i).setVisibility(View.VISIBLE);
+        }
+        listVis.get(i).setVisibility(View.VISIBLE);
+        listTitle.get(i).setText("更多歌单");
     }
 
     public void insertElement(){
