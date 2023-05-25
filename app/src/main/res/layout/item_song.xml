@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background">
 
     <ImageView
         android:id="@+id/image_cover"
@@ -21,7 +22,8 @@
         android:layout_toEndOf="@+id/image_cover"
         android:gravity="center"
         android:text="我喜欢"
-        android:textColor="@color/black"
+
+        android:textColor="@color/font"
         android:textSize="25dp" />
 
 </RelativeLayout>

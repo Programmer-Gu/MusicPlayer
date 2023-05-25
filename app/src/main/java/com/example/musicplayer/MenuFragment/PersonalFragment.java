@@ -231,7 +231,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         dialog.dismiss();
                         return;
                     }
-                    // 执行设置头像的操作，例如更新数据模型或调用网络请求
+                    // 执行设置头像的操作，更新数据模型
                     iv_head.setImageResource(avatarResId);
 
                     dbHelper.updateHeadPicturePathById(user_id, avatarResId);

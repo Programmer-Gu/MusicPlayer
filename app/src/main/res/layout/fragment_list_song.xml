@@ -13,7 +13,7 @@
             android:id="@+id/song_list_background"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@drawable/btn_missing">
+            android:background="@color/transparent">
 
             <TextView
                 android:id="@+id/song_list_name"
@@ -41,7 +41,7 @@
                 android:layout_marginLeft="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_play"
-                android:background="#C8F1C8"/>
+                android:background="@color/transparent"/>
 
             <TextView
                 android:layout_width="wrap_content"
