@@ -51,11 +51,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        //建立数据库对象
-        dbHelper = DBHelper.getInstance(this);
-        //打开数据库读写连接
-        dbHelper.openReadLink();
-        dbHelper.openWriteLink();
     }
 
     @Override
@@ -76,6 +71,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
+
+        //建立数据库对象
+        dbHelper = DBHelper.getInstance(this);
+        //打开数据库读写连接
+        dbHelper.openReadLink();
+        dbHelper.openWriteLink();
 
         initViews();//初始化控件
         initEvents();//初始化事件

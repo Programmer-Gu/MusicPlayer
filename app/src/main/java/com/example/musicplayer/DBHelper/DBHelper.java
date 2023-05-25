@@ -443,37 +443,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     * 根据用户id查询其歌单id
-     *
-     * @param userId 用户id
-     * @return List<Integer> 存放用户的歌单id
-     */
-    public List<Integer> getPlaylistByUserId(int userId) {
-        String query = "SELECT " + COLUMN_PLAYLIST_ID +
-                " FROM " + TABLE_USER_PLAYLIST +
-                " WHERE " + COLUMN_USER_ID + " = ?";
-        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(userId)});
-
-        List<Integer> list = new ArrayList<>();
-        //处理查询结果
-        while (cursor.moveToNext()) {
-            int playlistIdColumnIndex = cursor.getColumnIndex(COLUMN_PLAYLIST_ID);
-
-            if (playlistIdColumnIndex != -1) {
-                int playlistId = cursor.getInt(playlistIdColumnIndex);
-                list.add(playlistId);
-
-            } else {
-                cursor.close();
-                DBLog.d(DBLog.QUERY_TAG, TABLE_USER, "列索引无效");
-                return null; // 列索引无效
-            }
-        }
-        return list;
-    }
-
-
-    /**
      *  根据用户id查询其歌单id
      * @param userId 用户id
      * @return List<Integer> 存放用户的歌单id
@@ -668,34 +637,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return playList;
     }
 
-    /**
-     * 根据歌名进行模糊查询
-     * @param name 歌名
-     * @return 所有符合查询的歌曲列表
-     */
-    public List<Music> searchMusicByName(String name) {
-        List<Music> list = new ArrayList<>();
-        String query = "SELECT " + COLUMN_MUSIC_ID +
-                " FROM " + TABLE_MUSIC +
-                " WHERE " + COLUMN_MUSIC_NAME + "LIKE %" + name + "%;";
-        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(name)});
-
-        while (cursor.moveToNext()) {
-
-            int musicIdColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
-
-            if (musicIdColumnIndex != -1) {
-                int musicId = cursor.getInt(musicIdColumnIndex);
-                Music tmp_music = dbHelper.getMusicById(musicId);
-                list.add(tmp_music);
-            } else {
-                cursor.close();
-                DBLog.d(DBLog.QUERY_TAG, TABLE_PLAYLIST_SONG, "列索引无效");
-                return null; // 列索引无效
-            }
-        }
-        return list;
-    }
 
 
     /**

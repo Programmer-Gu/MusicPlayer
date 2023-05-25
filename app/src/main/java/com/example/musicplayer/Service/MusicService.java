@@ -196,6 +196,10 @@ public class MusicService extends Service {
             }
         }
 
+        public void addNextMusic( Music music ){
+           listIterator.add(music);
+        }
+
         public boolean getMusicState(){
            if( musicIsNull() ){
                return false;

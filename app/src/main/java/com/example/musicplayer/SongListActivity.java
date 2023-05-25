@@ -1,24 +1,19 @@
 package com.example.musicplayer;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.Adapter.MusicAdapter;
-import com.example.musicplayer.R;
+import com.example.musicplayer.Service.MusicService;
 import com.example.musicplayer.entity.Music;
 import com.example.musicplayer.entity.PlayList;
 
@@ -48,14 +43,33 @@ public class SongListActivity  extends AppCompatActivity {
         listView.setAdapter(musicAdapter);
 
         initSongList();
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 View itemView = listView.getChildAt(position);
-                
+                MusicService.MusicControl musicControl = MainActivity.musicControl;
+                musicControl.addNextMusic(mySongList.get(position));
+                musicControl.nextMusic();
+                Intent intent = new Intent(SongListActivity.this, PlayList.class);
+                startActivity(intent);
             }
         });
+
+        for( int i = 0; i < mySongList.size(); i++ ){
+            View itemView = listView.getChildAt(i);
+            Button nextButton = itemView.findViewById(R.id.to_play);
+            int finalI = i;
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MusicService.MusicControl musicControl = MainActivity.musicControl;
+                    musicControl.addNextMusic(mySongList.get(finalI));
+                    Toast.makeText(SongListActivity.this, "已添加至下一首播放", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
     }
 
     public void initSongList(){

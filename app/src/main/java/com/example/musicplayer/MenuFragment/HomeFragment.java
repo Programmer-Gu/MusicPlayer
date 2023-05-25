@@ -93,7 +93,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     intent.putExtra("ListName", playList.getListName());
                 }
                 startActivity(intent);
-
         }
     }
 

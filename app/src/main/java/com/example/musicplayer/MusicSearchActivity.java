@@ -10,5 +10,7 @@ public class MusicSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list_music);
+
+
     }
 }

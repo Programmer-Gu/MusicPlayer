@@ -20,7 +20,6 @@ import com.example.musicplayer.Service.MusicService;
 public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener {
     public static boolean ifAlive;
     //进度条
-    private static SeekBar seekBar;
     private static TextView tv_progress, tv_total, tv_songName;
     private static SeekBar sb_progress;
     private static ImageView songCover;
