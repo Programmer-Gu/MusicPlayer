@@ -17,12 +17,14 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.CategoryFragment;
 import com.example.musicplayer.MenuFragment.HomeFragment;
 import com.example.musicplayer.MenuFragment.PersonalFragment;
 import com.example.musicplayer.Service.MusicService;
+import com.example.musicplayer.entity.Music;
 import com.example.musicplayer.entity.PlayList;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Intent serviceIntent;
     private boolean isUnbind;
     private List<PlayList> playList_data;
+    private List<Integer> play_list;
 
     @Override
     protected void onStart() {
@@ -208,13 +211,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         };//创建服务连接对象
         serviceIntent = new Intent(MainActivity.this,MusicService.class);
         bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
+
     }
 
     private void getAllPlayList(){
         playList_data = new ArrayList<>();
         int user_id = sharedPreferences.getInt("user_id", -114514 );
         if( user_id == -114514 )return;
-        List<Integer>play_list = dbHelper.getPlaylistByUserId(user_id);
+        play_list = dbHelper.getPlaylistByUserId(user_id);
         for( int f : play_list ){
             playList_data.add(dbHelper.findMusicListById(f));
         }
