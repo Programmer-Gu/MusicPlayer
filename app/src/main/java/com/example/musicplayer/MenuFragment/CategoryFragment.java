@@ -45,7 +45,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     private AlertDialog dialog;
     private SharedPreferences sharedPreferences;
     private ImageView iv_picture;
-    private int pictureId;
+
+    private Integer picturePath=R.drawable.cover1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
     private void showAddListDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        //todo
         View dialogView = inflater.inflate(R.layout.dialog_add_playlist, null);
         dialogBuilder.setView(dialogView);
 
@@ -141,6 +141,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     dialog.dismiss();
                 }
             });
@@ -175,7 +176,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
 
-                long playListId = dbHelper.insertPlaylist(listName, pictureId, user_id);
+                long playListId = dbHelper.insertPlaylist(listName, picturePath, user_id);
                 dbHelper.insertUserPlaylist(user_id, playListId);
                 DBHelper.showToast(getContext(), "歌单添加成功");
 
@@ -224,7 +225,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
             ImageView imageView = convertView.findViewById(R.id.imageViewAvatar);
 
             // 设置封面图片
-            pictureId = PictureList.get(position);
+            int pictureId = PictureList.get(position);
             imageView.setImageResource(pictureId);
 
             // 设置点击监听器
@@ -238,7 +239,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                         return;
                     }
 
-                    // 执行设置头像的操作，例如更新数据模型或调用网络请求
+                    // 执行设置封面的操作，更新数据
+
                     iv_picture.setImageResource(pictureId);
                     Log.d("pictureId", "" + pictureId);
 
@@ -247,6 +249,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
 
                     // 关闭对话框
                     dialog.dismiss();
+                    picturePath = pictureId;
                 }
             });
 

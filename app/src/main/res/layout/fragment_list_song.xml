@@ -13,7 +13,15 @@
             android:id="@+id/song_list_background"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@drawable/btn_missing">
+            android:background="@color/transparent">
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/font">
 
             <TextView
                 android:id="@+id/song_list_name"
@@ -22,9 +30,17 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="10dp"
                 android:text="歌单名称"
-                android:textColor="@color/font"
+                android:textColor="@color/white"
                 android:textSize="25sp" />
-        </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_title"
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,11 +53,11 @@
                 android:id="@+id/startAllMusic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="10dp"
                 android:layout_marginLeft="10dp"
+                android:background="@color/transparent"
+                android:padding="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_play"
-                android:background="#C8F1C8"/>
+                android:src="@drawable/ic_play" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,6 +69,12 @@
                 android:textColor="@color/font"
                 android:textSize="23sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_title"
+            android:background="@android:color/darker_gray" />
 
         <ListView
             android:id="@+id/song_list"
