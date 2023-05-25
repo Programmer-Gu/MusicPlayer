@@ -170,8 +170,14 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
 
+
                 //修改页面显示
                 listName = et_ListName.getText().toString();
+
+                if (listName.isEmpty()) {
+                    Toast.makeText(getContext(), "请输入歌单名称喔~", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 long playListId = dbHelper.insertPlaylist(listName, pictureId, user_id);
                 dbHelper.insertUserPlaylist(user_id, playListId);

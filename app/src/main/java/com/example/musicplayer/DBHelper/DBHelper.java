@@ -681,11 +681,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 检查音乐表是否创建过
+     *
      * @return
      */
     public boolean MusicTableExists() {
         String checkTableQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
-        Cursor cursor = mRDB.rawQuery(checkTableQuery,new String[]{TABLE_MUSIC});
+        Cursor cursor = mRDB.rawQuery(checkTableQuery, new String[]{TABLE_MUSIC});
 
         if (cursor.moveToFirst()) {
 
@@ -703,6 +704,41 @@ public class DBHelper extends SQLiteOpenHelper {
         return false;
     }
 
+
+    /**
+     * 获取所有音乐id
+     * @return
+     */
+    public List<Integer> getAllMusicIds() {
+        List<Integer> musicIds = new ArrayList<>();
+
+        String[] columns = {COLUMN_MUSIC_ID}; // 列名
+        Cursor cursor = mRDB.query(TABLE_MUSIC, columns, null, null, null, null, null);
+
+        int columnIndex = cursor.getColumnIndexOrThrow(COLUMN_MUSIC_ID);
+        while (cursor.moveToNext()) {
+            int musicId = cursor.getInt(columnIndex);
+            musicIds.add(musicId);
+        }
+
+        cursor.close();
+
+        return musicIds;
+    }
+
+
+    /**
+     * 获取所有音乐对象
+     * @return
+     */
+    public List<Music> getAllMusic() {
+        List<Music> list = new ArrayList<>();
+        List<Integer> music_id_list = getAllMusicIds();
+        for (Integer integer : music_id_list) {
+            list.add(getMusicById(integer));
+        }
+        return list;
+    }
 
 
     /**

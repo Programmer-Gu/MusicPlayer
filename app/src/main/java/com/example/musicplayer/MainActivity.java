@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -54,11 +55,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        //建立数据库对象
-        dbHelper = DBHelper.getInstance(this);
-        //打开数据库读写连接
-        dbHelper.openWriteLink();
-        dbHelper.openReadLink();
         // 检查音乐表是否存在
         Music music = dbHelper.getMusicById(1);
         //如果存在，不插入数据
@@ -104,13 +100,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
         //建立数据库对象
         dbHelper = DBHelper.getInstance(this);
         //打开数据库读写连接
-        dbHelper.openReadLink();
         dbHelper.openWriteLink();
+        dbHelper.openReadLink();
+
+
+        sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
+
 
         initViews();//初始化控件
         initEvents();//初始化事件
@@ -209,17 +208,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 Log.d("gzc", "服务连接失败");
             }
         };//创建服务连接对象
-        serviceIntent = new Intent(MainActivity.this,MusicService.class);
-        bindService( serviceIntent,conn,Context.BIND_AUTO_CREATE);//绑定服务
-
+        serviceIntent = new Intent(MainActivity.this, MusicService.class);
+        bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);//绑定服务
     }
 
-    private void getAllPlayList(){
+    private void getAllPlayList() {
         playList_data = new ArrayList<>();
-        int user_id = sharedPreferences.getInt("user_id", -114514 );
-        if( user_id == -114514 )return;
-        play_list = dbHelper.getPlaylistByUserId(user_id);
-        for( int f : play_list ){
+        int user_id = sharedPreferences.getInt("user_id", -114514);
+        if (user_id == -114514) {
+            return;
+        }
+        List<Integer> play_list = dbHelper.getPlaylistByUserId(user_id);
+        for (int f : play_list) {
             playList_data.add(dbHelper.findMusicListById(f));
         }
     }
@@ -239,21 +239,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 selectTab(2);
                 break;
             case R.id.button_player:
-                if( musicControl.getMusicState() ){
+                if (musicControl.getMusicState()) {
                     musicPlayer.setImageResource(R.drawable.ic_play);
                     musicControl.pausePlay();
-                }
-                else{
-                    if( !musicControl.musicIsNull() ){
-                        Toast.makeText(MainActivity.this,"歌单里还没有音乐哦", Toast.LENGTH_SHORT).show();
-                        return;
+                } else {
+                    musicPlayer.setImageResource(R.drawable.ic_stop);
+                    if (!musicControl.musicIsNull()) {
+                        musicControl.continuePlay();
                     }
                     musicPlayer.setImageResource(R.drawable.ic_stop);
                     musicControl.play();
                 }
                 break;
             case R.id.music_image:
-                Intent intent = new Intent( MainActivity.this, MusicPlayerActivity.class );
+                Intent intent = new Intent(MainActivity.this, MusicPlayerActivity.class);
                 startActivity(intent);
                 break;
         }
