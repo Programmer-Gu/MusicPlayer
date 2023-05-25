@@ -42,7 +42,7 @@ public class MusicListAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.item_layout, viewGroup, false);
+            view = inflater.inflate(R.layout.item_song, viewGroup, false);
         }
 
         ImageView imageView = view.findViewById(R.id.image_cover);

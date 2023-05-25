@@ -63,7 +63,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         this.playList_data = playList_data;
         this.context = context;
         this.play_list = play_list;
-        this.aMain = aMain;
     }
 
     @SuppressLint("MissingInflatedId")
@@ -84,12 +83,9 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 View itemView = listView.getChildAt(position);
 
                 //开启歌单跳转页面
-                Intent intent = new Intent(context, SongListActivity.class);
+                Intent intent = new Intent(getContext(), SongListActivity.class);
                 if (playList_data.size() > position) {
-                    PlayList playList = playList_data.get(position);
-                    intent.putExtra("musicList", new ArrayList<>(playList.getMusicList()));
-                    intent.putExtra("cover", playList.getListPicturePath());
-                    intent.putExtra("ListName", playList.getListName());
+                    intent.putExtra("listId", play_list.get(position));
                 }
                 startActivity(intent);
             }

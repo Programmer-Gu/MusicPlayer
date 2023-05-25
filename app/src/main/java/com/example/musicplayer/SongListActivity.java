@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.Adapter.MusicAdapter;
 import com.example.musicplayer.Service.MusicService;
 import com.example.musicplayer.entity.Music;
@@ -21,13 +22,14 @@ import com.example.musicplayer.entity.PlayList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongListActivity  extends AppCompatActivity {
+public class SongListActivity extends AppCompatActivity {
     private ListView listView;
     private TextView playListName;
     private MusicAdapter musicAdapter;
     private List<Music> mySongList;
     private RelativeLayout relativeLayout;
     private ImageButton imageButton;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +37,22 @@ public class SongListActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_list_song);
 
+        dbHelper = DBHelper.getInstance(this);
+        dbHelper.openWriteLink();
+        dbHelper.openReadLink();
 
         // 初始化列表，绑定控件元素
-        mySongList = new ArrayList<Music>();
-        initSongList();
-        musicAdapter = new MusicAdapter(SongListActivity.this, mySongList, null, null, null);
-
         playListName = findViewById(R.id.song_list_name);
         imageButton = findViewById(R.id.startAllMusic);
 
         relativeLayout = findViewById(R.id.song_list_background);
         listView = findViewById(R.id.song_list);
+
+        mySongList = new ArrayList<Music>();
+        initSongList();
+        musicAdapter = new MusicAdapter(SongListActivity.this, mySongList, null, null, null);
+
+
         listView.setAdapter(musicAdapter);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -71,16 +78,21 @@ public class SongListActivity  extends AppCompatActivity {
         });
     }
 
-    public void initSongList(){
+    public void initSongList() {
         Intent intent = getIntent();
-        List<Music> musicList = (List<Music>) intent.getSerializableExtra("musicList");
+        int list_id = intent.getIntExtra("listId", 0);
+
+
+
+        PlayList playList = dbHelper.findMusicListById(list_id);
+        List<Music> musicList = playList.getMusicList();
         mySongList.clear();
-        if( musicList == null )return;
-        for( Music f : musicList ){
+        if (musicList == null) return;
+        for (Music f : musicList) {
             mySongList.add(f);
         }
-        relativeLayout.setBackgroundResource(intent.getIntExtra("cover",0));
-        playListName.setText(intent.getIntExtra("ListName",0));
+        relativeLayout.setBackgroundResource(playList.getListPicturePath());
+        playListName.setText(playList.getListName());
     }
 
 }

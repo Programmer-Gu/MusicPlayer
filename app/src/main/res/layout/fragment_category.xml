@@ -17,6 +17,7 @@
         android:textSize="40dp" />
 
     <View
+        android:id="@+id/fenge"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/tv_title"
@@ -27,7 +28,8 @@
     <ListView
         android:id="@+id/all_song_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fenge" />
 
     <Button
         android:id="@+id/add_list"

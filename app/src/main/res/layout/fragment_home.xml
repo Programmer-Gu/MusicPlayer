@@ -42,8 +42,9 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/btn_missing"
+                    android:text="检索歌曲"
                     android:textColor="@color/font"
-                    android:hint="Search" />
+                    android:textSize="17sp" />
             </LinearLayout>
 
             <com.youth.banner.Banner
@@ -98,19 +99,19 @@
                                 android:id="@+id/sing_list_1"
                                 android:layout_width="130dp"
                                 android:layout_height="130dp"
+                                android:layout_gravity="center"
                                 android:background="#00000000"
                                 android:clickable="false"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/house_door"
-                                android:layout_gravity="center"/>
+                                android:src="@drawable/house_door" />
 
                             <TextView
                                 android:id="@+id/sing_list_name_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="歌单"
                                 android:gravity="center"
-                                android:textColor="@color/black"/>
+                                android:text="歌单"
+                                android:textColor="@color/black" />
                         </LinearLayout>
 
 

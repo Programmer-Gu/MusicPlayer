@@ -123,9 +123,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         initViews();//初始化控件
         initEvents();//初始化事件
+
+        getAllPlayList();//获取用户歌单信息
+
         initDatas();//初始化数据
         initService();//初始化服务
-        getAllPlayList();//获取用户歌单信息
+
 
         //查询登录状态，如果没有登录，跳转到登录界面
         boolean login_status = sharedPreferences.getBoolean("login_status", false);
@@ -230,7 +233,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if (user_id == -114514) {
             return;
         }
-        List<Integer> play_list = dbHelper.getPlaylistByUserId(user_id);
+        play_list = dbHelper.getPlaylistByUserId(user_id);
         for (int f : play_list) {
             playList_data.add(dbHelper.findMusicListById(f));
         }
