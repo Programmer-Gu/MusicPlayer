@@ -131,51 +131,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createUserTableQuery);
 
 
-        // 检查音乐表是否存在
-        boolean isTableExists = false;
-        String checkTableQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
-        Cursor cursor = db.rawQuery(checkTableQuery, new String[]{TABLE_MUSIC});
-        if (cursor.moveToFirst()) {
-            isTableExists = true; // 表已经存在
-        }
-        cursor.close();
-
-        // 如果表不存在，则创建表并插入数据
-        if (!isTableExists) {
-            // 创建音乐表
-            String createMusicTableQuery = "CREATE TABLE " + TABLE_MUSIC + "(" +
-                    COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
-                    COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
-                    COLUMN_MUSIC_COVER_PATH + " INTEGER," +
-                    COLUMN_MUSIC_PATH + " TEXT)";
-            db.execSQL(createMusicTableQuery);
-            // 插入数据
-
-            Music temp_music0 = new Music("稻香", "周杰伦", R.raw.daoxiang, R.drawable.daoxiang);
-            Music temp_music1 = new Music("大约在冬季", "齐秦", R.raw.dayuezaidongji, R.drawable.dayuezaidongji);
-            Music temp_music2 = new Music("玫瑰花的葬礼", "许嵩", R.raw.meiguihuadezangli, R.drawable.meiguihuadezangli);
-            Music temp_music3 = new Music("平凡之路", "朴树", R.raw.pingfanzhilu, R.drawable.pingfanzhilu);
-            Music temp_music4 = new Music("起风了", "买辣椒也用券", R.raw.qifengle, R.drawable.qifengle);
-            Music temp_music5 = new Music("青花瓷", "周杰伦", R.raw.qinghuaci, R.drawable.qinghuaci);
-            Music temp_music6 = new Music("认真的雪", "薛之谦", R.raw.renzhendexue, R.drawable.renzhendexue);
-            Music temp_music7 = new Music("素颜", "许嵩", R.raw.suyan, R.drawable.suyan);
-            Music temp_music8 = new Music("有何不可", "许嵩", R.raw.youhebuke, R.drawable.youhebuke);
-            Music temp_music9 = new Music("屋顶", "周杰伦", R.raw.wuding, R.drawable.wuding);
-            insertMusic(temp_music0);
-            insertMusic(temp_music1);
-            insertMusic(temp_music2);
-            insertMusic(temp_music3);
-            insertMusic(temp_music4);
-            insertMusic(temp_music5);
-            insertMusic(temp_music6);
-            insertMusic(temp_music7);
-            insertMusic(temp_music8);
-            insertMusic(temp_music9);
-
-
-            // 插入更多数据...
-        }
+        // 创建音乐表
+        String createMusicTableQuery = "CREATE TABLE " + TABLE_MUSIC + "(" +
+                COLUMN_MUSIC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_MUSIC_NAME + " TEXT NOT NULL," +
+                COLUMN_MUSIC_SINGER_NAME + " TEXT NOT NULL," +
+                COLUMN_MUSIC_COVER_PATH + " INTEGER," +
+                COLUMN_MUSIC_PATH + " TEXT)";
+        db.execSQL(createMusicTableQuery);
 
 
         // 3.创建歌单表
@@ -207,8 +170,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(" + COLUMN_PLAYLIST_ID + ") REFERENCES " + TABLE_PLAYLIST + "(" + COLUMN_PLAYLIST_ID + ")" +
                 ")";
         db.execSQL(createUserPlaylistTableQuery);
-
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
@@ -243,11 +206,11 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_MUSIC_NAME, music.getMusicName());
         values.put(COLUMN_MUSIC_SINGER_NAME, music.getSingerName());
-        values.put(COLUMN_MUSIC_COVER_PATH, music.getMusicPath());
+        values.put(COLUMN_MUSIC_PATH, music.getMusicPath());
         values.put(COLUMN_MUSIC_COVER_PATH, music.getCoverPath());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_MUSIC, null, values);
-        db.close();
+
         //打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_MUSIC, "插入" + result + "行");
         return result;
@@ -471,7 +434,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             int musicPathIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
 
-            if (musicPathIndex != -1 ) {
+            if (musicPathIndex != -1) {
 
                 int musicId = cursor.getInt(musicPathIndex);
 
@@ -489,10 +452,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     /**
-     *  根据用户id查询其歌单id
+     * 根据用户id查询其歌单id
+     *
      * @param userId 用户id
      * @return List<Integer> 存放用户的歌单id
      */
@@ -567,6 +529,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 根据用户id修改用户昵称
+     *
      * @param userId      用户id
      * @param newNickname 用户要修改的昵称
      * @return 数据库user表中被修改的行数
@@ -686,9 +649,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
     /**
      * 根据歌名进行模糊查询
+     *
      * @param name 歌名
      * @return 所有符合查询的歌曲列表
      */
@@ -716,6 +679,29 @@ public class DBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    /**
+     * 检查音乐表是否创建过
+     * @return
+     */
+    public boolean MusicTableExists() {
+        String checkTableQuery = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
+        Cursor cursor = mRDB.rawQuery(checkTableQuery,new String[]{TABLE_MUSIC});
+
+        if (cursor.moveToFirst()) {
+
+            int musicIdColumnIndex = cursor.getColumnIndex(COLUMN_MUSIC_ID);
+
+            if (musicIdColumnIndex != -1) {
+                return true;
+
+            } else {
+                cursor.close();
+                DBLog.d(DBLog.QUERY_TAG, TABLE_MUSIC, "列索引无效");
+                return false; // 列索引无效
+            }
+        }
+        return false;
+    }
 
 
 
