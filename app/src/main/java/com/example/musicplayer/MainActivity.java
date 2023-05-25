@@ -53,11 +53,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        //建立数据库对象
-        dbHelper = DBHelper.getInstance(this);
-        //打开数据库读写连接
-        dbHelper.openWriteLink();
-        dbHelper.openReadLink();
         // 检查音乐表是否存在
         Music music = dbHelper.getMusicById(1);
         //如果存在，不插入数据
@@ -103,6 +98,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        //建立数据库对象
+        dbHelper = DBHelper.getInstance(this);
+        //打开数据库读写连接
+        dbHelper.openWriteLink();
+        dbHelper.openReadLink();
+
 
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
