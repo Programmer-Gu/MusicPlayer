@@ -23,24 +23,10 @@
         android:layout_marginTop="20dp"
         android:background="@android:color/darker_gray" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        app:cardCornerRadius="400dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:cardElevation="0dp">
 
-        <Button
-            android:id="@+id/addList"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="+"
-            android:textSize="25sp"/>
-    </androidx.cardview.widget.CardView>
+
+
+
 
 
     <ListView

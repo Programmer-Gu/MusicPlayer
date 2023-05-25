@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.Adapter.MusicAdapter;
@@ -31,6 +32,7 @@ public class MusicSearchActivity extends AppCompatActivity {
     private List<Integer> play_list;
     private SharedPreferences sharedPreferences;
     private List<Music> allMusic;
+    private MusicAdapter musicAdapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -56,7 +58,8 @@ public class MusicSearchActivity extends AppCompatActivity {
             playList_data.add(dbHelper.findMusicListById(f));
         }
 
-        MusicAdapter musicAdapter = new MusicAdapter(MusicSearchActivity.this,allMusic,playList_data,play_list,dbHelper);
+        allMusic=dbHelper.getAllMusic();
+        musicAdapter = new MusicAdapter(MusicSearchActivity.this,allMusic,playList_data,play_list,dbHelper);
         listView.setAdapter(musicAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,8 +77,17 @@ public class MusicSearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String searchText = editText.getText().toString();
-                allMusic = dbHelper.searchMusicByName(searchText);
-                musicAdapter.notifyDataSetChanged();
+                List<Music> getResult = dbHelper.searchMusicByName(searchText);
+                if( getResult.size() > 0 ){
+                    allMusic.clear();
+                    for( Music f : getResult ){
+                        allMusic.add(f);
+                    }
+                    musicAdapter.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(MusicSearchActivity.this,"没有符合标题的检索结果哦", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

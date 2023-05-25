@@ -190,7 +190,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_USER, null, values);
-        db.close();
+
         //打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_USER, "插入" + result + "行");
         return result;
@@ -243,7 +243,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        db.close();
+
         // 打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST, "插入" + result + "行，自增ID为" + insertedId);
 
@@ -263,7 +263,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_MUSIC_ID, musicId);
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_PLAYLIST_SONG, null, values);
-        db.close();
+
         //打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_PLAYLIST_SONG, "插入" + result + "行");
         return result;
@@ -282,7 +282,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PLAYLIST_ID, playlistId);
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.insert(TABLE_USER_PLAYLIST, null, values);
-        db.close();
+
         //打印日志
         DBLog.d(DBLog.INSERT_TAG, TABLE_USER_PLAYLIST, "插入" + result + "行");
         return result;
@@ -659,8 +659,8 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Music> list = new ArrayList<>();
         String query = "SELECT " + COLUMN_MUSIC_ID +
                 " FROM " + TABLE_MUSIC +
-                " WHERE " + COLUMN_MUSIC_NAME + "LIKE %" + name + "%;";
-        Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(name)});
+                " WHERE " + COLUMN_MUSIC_NAME + " LIKE '%' || ? || '%'";
+        Cursor cursor = mRDB.rawQuery(query, new String[]{name});
 
         while (cursor.moveToNext()) {
 
@@ -707,6 +707,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 获取所有音乐id
+     *
      * @return
      */
     public List<Integer> getAllMusicIds() {
@@ -729,6 +730,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * 获取所有音乐对象
+     *
      * @return
      */
     public List<Music> getAllMusic() {
