@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.musicplayer.DBHelper.DBHelper;
 import com.example.musicplayer.MenuFragment.CategoryFragment;
@@ -69,13 +70,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("gzc", String.format("%d",R.drawable.daoxiang));
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences("root", Context.MODE_PRIVATE);
 
         //建立数据库对象
-        dbHelper = new DBHelper(MainActivity.this);
+        dbHelper = DBHelper.getInstance(MainActivity.this);
         //打开数据库读写连接
         dbHelper.openReadLink();
         dbHelper.openWriteLink();
@@ -211,10 +213,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     musicControl.pausePlay();
                 }
                 else{
-                    musicPlayer.setImageResource(R.drawable.ic_stop);
                     if( !musicControl.musicIsNull() ){
-                        musicControl.continuePlay();
+                        Toast.makeText(MainActivity.this,"歌单里还没有音乐哦", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    musicPlayer.setImageResource(R.drawable.ic_stop);
                     musicControl.play();
                 }
                 break;

@@ -24,6 +24,9 @@
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
+            android:name=".MusicSearchActivity"
+            android:exported="true" />
+        <activity
             android:name=".MusicPlayerActivity"
             android:exported="true" />
         <activity

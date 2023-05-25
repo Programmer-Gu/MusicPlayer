@@ -33,13 +33,15 @@
             android:background="@color/background"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/startAllMusic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
                 android:layout_marginLeft="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_play" />
+                android:src="@drawable/ic_play"
+                android:background="#C8F1C8"/>
 
             <TextView
                 android:layout_width="wrap_content"

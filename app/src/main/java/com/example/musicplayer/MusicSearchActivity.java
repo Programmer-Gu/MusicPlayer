@@ -38,7 +38,7 @@ public class MusicSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_list_music);
 
-        listView.findViewById(R.id.music_list);
+        listView = findViewById(R.id.music_list);
         startSearch = findViewById(R.id.beginSearch);
         editText = findViewById(R.id.searchText);
 

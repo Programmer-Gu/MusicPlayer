@@ -36,6 +36,7 @@
                     android:src="@drawable/search_icon" />
 
                 <Button
+                    android:id="@+id/jump_to_search"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

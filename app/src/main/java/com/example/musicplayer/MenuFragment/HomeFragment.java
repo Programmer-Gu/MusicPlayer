@@ -34,6 +34,7 @@ import com.example.musicplayer.MenuFragment.Adapter.DataBean;
 import com.example.musicplayer.MenuFragment.Adapter.ImageAdapter;
 import com.example.musicplayer.MenuFragment.Adapter.MusicAdapter;
 import com.example.musicplayer.MenuFragment.Adapter.MusicListAdapter;
+import com.example.musicplayer.MusicSearchActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.Service.MusicService;
 import com.example.musicplayer.SongListActivity;
@@ -72,6 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         view.findViewById(R.id.sing_list_1).setOnClickListener(this);
+        view.findViewById(R.id.jump_to_search).setOnClickListener(this);
 
         banner = view.findViewById(R.id.banner);
         ImageAdapter imageAdapter = new ImageAdapter(DataBean.getTestData());
@@ -110,9 +112,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     intent.putExtra("ListName", playList.getListName());
                 }
                 startActivity(intent);
-            case R.id.heart:
-
-
+            case R.id.jump_to_search:
+                Intent myIntent = new Intent(context, MusicSearchActivity.class);
+                startActivity(myIntent);
         }
     }
 

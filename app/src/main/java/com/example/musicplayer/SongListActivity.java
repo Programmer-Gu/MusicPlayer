@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class SongListActivity  extends AppCompatActivity {
     private MusicAdapter musicAdapter;
     private List<Music> mySongList;
     private RelativeLayout relativeLayout;
+    private ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +35,29 @@ public class SongListActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_list_song);
 
+
         // 初始化列表，绑定控件元素
         mySongList = new ArrayList<Music>();
+        initSongList();
         musicAdapter = new MusicAdapter(SongListActivity.this, mySongList, null, null, null);
 
         playListName = findViewById(R.id.song_list_name);
+        imageButton = findViewById(R.id.startAllMusic);
+
         relativeLayout = findViewById(R.id.song_list_background);
         listView = findViewById(R.id.song_list);
         listView.setAdapter(musicAdapter);
 
-        initSongList();
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MusicService.MusicControl musicControl = MainActivity.musicControl;
+                musicControl.refreshList(mySongList);
+                musicControl.play();
+                Toast.makeText(SongListActivity.this, "歌曲已全部加入播放队列中", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
