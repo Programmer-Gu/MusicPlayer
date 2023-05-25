@@ -659,7 +659,7 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Music> list = new ArrayList<>();
         String query = "SELECT " + COLUMN_MUSIC_ID +
                 " FROM " + TABLE_MUSIC +
-                " WHERE " + COLUMN_MUSIC_NAME + "LIKE %" + name + "%;";
+                " WHERE " + COLUMN_MUSIC_NAME + " LIKE '%" + name + "%'";
         Cursor cursor = mRDB.rawQuery(query, new String[]{String.valueOf(name)});
 
         while (cursor.moveToNext()) {

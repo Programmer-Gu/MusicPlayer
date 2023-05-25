@@ -58,7 +58,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
         sharedPreferences = context.getSharedPreferences("root", Context.MODE_PRIVATE);
     }
 
-    public CategoryFragment(Context context, List<PlayList> playList_data, List<Integer> play_list, MainActivity aMain) {
+    public CategoryFragment(Context context, List<PlayList> playList_data, List<Integer> play_list) {
         // Required empty public constructor
         this.playList_data = playList_data;
         this.context = context;
@@ -183,6 +183,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 dbHelper.insertUserPlaylist(user_id, playListId);
                 DBHelper.showToast(getContext(), "歌单添加成功");
 
+                refreshData(user_id);
                 dialog.dismiss();
 
             }
@@ -195,6 +196,15 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 dialog.dismiss();
             }
         });
+    }
+
+    public void refreshData(int user_id){
+        List<Integer> play_list = dbHelper.getPlaylistByUserId(user_id);
+        playList_data.clear();
+        for (int f : play_list) {
+            playList_data.add(dbHelper.findMusicListById(f));
+        }
+        musicListAdapter.notifyDataSetChanged();
     }
 
     class PictureAdapter extends ArrayAdapter<Integer> {
