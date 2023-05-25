@@ -27,6 +27,7 @@ public class MusicService extends Service {
     private LinkedList<Music> musicList;
     private ListIterator<Music> listIterator;
     private Thread songThread;
+    private Music nowMusic;
 
     /**
      * 无参构造方法
@@ -82,7 +83,7 @@ public class MusicService extends Service {
     /**
      * //添加计时器用于设置音乐播放器中的播放进度条
      */
-    public void addTimer( Music nowMusic ) {
+    public void addTimer() {
         if (timer == null) {
             //创建计时器对象
             timer = new Timer();
@@ -169,10 +170,10 @@ public class MusicService extends Service {
                 if( !listIterator.hasPrevious() ){
                     listIterator.next();
                 }
-                Music nowMusic = listIterator.next();
+                nowMusic = listIterator.next();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
-                addTimer(nowMusic);//添加计时器
+                addTimer();//添加计时器
             }
         }
 
@@ -189,10 +190,10 @@ public class MusicService extends Service {
                 if( !listIterator.hasNext() ){
                     listIterator.previous();
                 }
-                Music nowMusic = listIterator.previous();
+                nowMusic = listIterator.previous();
                 player = MediaPlayer.create(MusicService.this, nowMusic.getMusicPath());
                 player.start();
-                addTimer(nowMusic);//添加计时器
+                addTimer();//添加计时器
             }
         }
 
@@ -205,6 +206,10 @@ public class MusicService extends Service {
                return false;
            }
            return player.isPlaying();
+        }
+
+        public Music getNowMusic(){
+           return nowMusic;
         }
 
         public boolean musicIsNull(){

@@ -6,6 +6,7 @@
     android:layout_height="50dp">
 
     <RelativeLayout
+        android:id="@+id/music_image"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/background"
@@ -24,8 +25,8 @@
             app:cardCornerRadius="40dp"
             app:cardElevation="0dp">
 
-            <ImageButton
-                android:id="@+id/music_image"
+            <ImageView
+                android:id="@+id/music_cover_show"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="#FFFFFF"

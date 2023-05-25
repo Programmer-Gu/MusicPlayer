@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -43,7 +45,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //声明三个Tab的布局文件
     private LinearLayout mTab1, mTab2, mTab3;
     //声明三个Tab的ImageButton
-    private ImageButton mImg1, mImg2, mImg3, toStartMusic, musicPlayer;
+    private ImageButton mImg1, mImg2, mImg3, musicPlayer;
+    private ImageView musicImage;
+    private LinearLayout toStartMusic;
     private DBHelper dbHelper;
     private SharedPreferences sharedPreferences;
     private ServiceConnection conn;
@@ -51,6 +55,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private boolean isUnbind;
     private List<PlayList> playList_data;
     private List<Integer> play_list;
+    private Music nowMusic;
 
     @Override
     protected void onStart() {
@@ -89,6 +94,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         if( musicControl == null )return;
         if( musicControl.getMusicState() ){
             musicPlayer.setImageResource(R.drawable.ic_stop);
+            nowMusic = musicControl.getNowMusic();
+            if( nowMusic == null ){
+                musicImage.setImageResource(R.drawable.icon);
+            }
+            musicImage.setImageResource(nowMusic.getCoverPath());
         }
         else{
             musicPlayer.setImageResource(R.drawable.ic_play);
@@ -148,6 +158,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         toStartMusic = findViewById(R.id.music_image);
         musicPlayer = findViewById(R.id.button_player);
+        musicImage.findViewById(R.id.music_cover_show);
+
     }
 
     private void initDatas() {
