@@ -3,8 +3,10 @@ package com.example.musicplayer.MenuFragment;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
@@ -38,6 +41,7 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener{
     private Context context;
     private Banner banner;
+    private MyBroadCastReceiver myBroadCastReceiver;
     private List<PlayList> playList_data;
     private List<Music> hotMusic;
     private List<Integer> play_list;
@@ -67,6 +71,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        myBroadCastReceiver = new MyBroadCastReceiver();
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("SongListUpdate");
+        getContext().registerReceiver(myBroadCastReceiver,filter);
 
         initList( view );
         refreshList();
@@ -195,5 +204,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         music6.setMusicPath(R.raw.meiguihuadezangli);
         music6.setCoverPath(R.drawable.meiguihuadezangli);
         music6.setSingerName("许嵩");
+    }
+
+    public class MyBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshList();
+        }
     }
 }

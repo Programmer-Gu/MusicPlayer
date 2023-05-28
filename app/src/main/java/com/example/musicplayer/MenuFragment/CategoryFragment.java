@@ -181,6 +181,10 @@ public class CategoryFragment extends Fragment implements View.OnClickListener {
                 DBHelper.showToast(getContext(), "歌单添加成功");
 
                 refreshData(user_id);
+
+                Intent intent=new Intent();
+                intent.setAction("SongListUpdate");
+                getContext().sendBroadcast(intent);
                 dialog.dismiss();
 
             }
